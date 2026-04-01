@@ -12,6 +12,7 @@ import {
 } from "@modelcontextprotocol/sdk/types.js";
 import {
   buildClaudePrompt,
+  translateError,
   PROJECT_TYPE_OPTIONS,
   FEATURES_BY_TYPE,
   type ProjectType,
@@ -97,6 +98,21 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
             },
           },
           required: ["projectType", "features"],
+        },
+      },
+      {
+        name: "translate_error",
+        description:
+          "에러 메시지를 받아 한국어 설명과 Claude Code에 바로 사용할 수 있는 해결 요청 프롬프트를 반환합니다. ENOENT, EADDRINUSE, MODULE_NOT_FOUND, SyntaxError 등 일반적인 에러를 인식합니다.",
+        inputSchema: {
+          type: "object",
+          properties: {
+            errorMessage: {
+              type: "string",
+              description: "번역할 에러 메시지",
+            },
+          },
+          required: ["errorMessage"],
         },
       },
       {
@@ -207,6 +223,22 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           {
             type: "text",
             text: prompt,
+          },
+        ],
+      };
+    }
+
+    case "translate_error": {
+      const { errorMessage } = args as { errorMessage: string };
+      if (!errorMessage?.trim()) {
+        throw new Error("errorMessage는 비어있을 수 없습니다.");
+      }
+      const translation = translateError(errorMessage);
+      return {
+        content: [
+          {
+            type: "text",
+            text: JSON.stringify(translation, null, 2),
           },
         ],
       };

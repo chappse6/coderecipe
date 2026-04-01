@@ -30,7 +30,7 @@ export default function HomePage() {
 
       {/* Quick Access Section */}
       <section className="container mx-auto px-4 pb-12">
-        <div className="grid gap-4 sm:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <Link href="/setup" className="group rounded-2xl border-2 border-purple-100 bg-white p-6 shadow-sm hover:border-purple-400 hover:shadow-md transition-all dark:bg-gray-800 dark:border-gray-700">
             <div className="mb-3 text-3xl">🔧</div>
             <h3 className="mb-1 font-bold text-gray-900 dark:text-white">환경 진단</h3>
@@ -42,6 +42,12 @@ export default function HomePage() {
             <h3 className="mb-1 font-bold text-gray-900 dark:text-white">프롬프트 빌더</h3>
             <p className="text-sm text-gray-500 dark:text-gray-400">질문 3개로 Claude Code 프롬프트 자동 생성</p>
             <span className="mt-3 inline-block text-sm font-medium text-purple-600 group-hover:underline dark:text-purple-400">시작하기 →</span>
+          </Link>
+          <Link href="/error-translator" className="group rounded-2xl border-2 border-red-100 bg-white p-6 shadow-sm hover:border-red-400 hover:shadow-md transition-all dark:bg-gray-800 dark:border-gray-700">
+            <div className="mb-3 text-3xl">🔴</div>
+            <h3 className="mb-1 font-bold text-gray-900 dark:text-white">에러 번역기</h3>
+            <p className="text-sm text-gray-500 dark:text-gray-400">에러 메시지를 한국어로 설명 + 해결 요청문 생성</p>
+            <span className="mt-3 inline-block text-sm font-medium text-red-500 group-hover:underline dark:text-red-400">사용하기 →</span>
           </Link>
           <Link href="/glossary" className="group rounded-2xl border-2 border-purple-100 bg-white p-6 shadow-sm hover:border-purple-400 hover:shadow-md transition-all dark:bg-gray-800 dark:border-gray-700">
             <div className="mb-3 text-3xl">📚</div>

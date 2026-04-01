@@ -414,6 +414,135 @@ export interface PromptBuilderInput {
   description?: string;
 }
 
+// ── Error Translator Types ────────────────────────────────────────────────────
+
+export interface ErrorPattern {
+  id: string;
+  pattern: RegExp;
+  title: string;             // short error name in Korean
+  explanation: string;       // "이건 ○○ 문제입니다" — plain Korean
+  suggestedPrompt: string;   // ready-to-paste Claude Code prompt
+}
+
+export interface TranslateErrorResult {
+  matched: boolean;
+  errorId?: string;
+  title: string;
+  explanation: string;
+  suggestedPrompt: string;
+}
+
+export const ERROR_PATTERNS: ErrorPattern[] = [
+  {
+    id: "enoent",
+    pattern: /ENOENT|no such file or directory/i,
+    title: "파일을 찾을 수 없음",
+    explanation: "이건 파일(또는 폴더)을 찾지 못하는 문제입니다. 경로가 잘못되었거나 파일이 아직 만들어지지 않았을 때 나타나요.",
+    suggestedPrompt: "ENOENT 에러가 발생했어요. 해당 파일이나 폴더가 존재하는지 확인하고, 경로가 올바른지 점검해서 해결해 주세요.",
+  },
+  {
+    id: "eaddrinuse",
+    pattern: /EADDRINUSE|address already in use/i,
+    title: "포트 충돌",
+    explanation: "이건 포트(통신 번호)가 이미 다른 프로그램에 의해 사용 중인 문제입니다. 같은 번호의 출입구를 두 개 동시에 열려고 할 때 나타나요.",
+    suggestedPrompt: "EADDRINUSE 에러가 발생했어요. 해당 포트를 사용 중인 프로세스를 찾아 종료하거나, 다른 포트 번호로 변경해서 해결해 주세요.",
+  },
+  {
+    id: "eperm",
+    pattern: /EPERM|operation not permitted/i,
+    title: "권한 문제",
+    explanation: "이건 파일이나 폴더에 접근할 권한이 없는 문제입니다. 잠긴 서랍을 열쇠 없이 열려는 것과 같아요.",
+    suggestedPrompt: "EPERM 권한 오류가 발생했어요. 해당 파일이나 폴더의 권한을 확인하고, 필요하다면 관리자 권한으로 실행하거나 권한을 변경해서 해결해 주세요.",
+  },
+  {
+    id: "eacces",
+    pattern: /EACCES|permission denied/i,
+    title: "접근 권한 없음",
+    explanation: "이건 파일이나 디렉토리에 접근이 거부된 문제입니다. 읽거나 쓸 수 있는 권한이 없을 때 나타나요.",
+    suggestedPrompt: "EACCES 권한 거부 오류가 발생했어요. 파일 접근 권한을 확인하고 수정하거나, sudo/관리자 권한으로 실행해서 해결해 주세요.",
+  },
+  {
+    id: "module-not-found",
+    pattern: /MODULE_NOT_FOUND|Cannot find module|Module not found/i,
+    title: "패키지 미설치",
+    explanation: "이건 필요한 패키지(라이브러리)가 설치되어 있지 않은 문제입니다. 레시피 재료가 없는 것과 같아요.",
+    suggestedPrompt: "모듈을 찾을 수 없는 에러가 발생했어요. 누락된 패키지를 확인하고 npm install 또는 pnpm install 명령어로 설치해서 해결해 주세요.",
+  },
+  {
+    id: "syntax-error",
+    pattern: /SyntaxError|Unexpected token|Unexpected end of/i,
+    title: "코드 문법 오류",
+    explanation: "이건 코드를 작성할 때 문법(규칙)을 지키지 않아서 생기는 문제입니다. 문장에 마침표가 빠진 것처럼 코드에 빠진 기호가 있어요.",
+    suggestedPrompt: "SyntaxError 문법 오류가 발생했어요. 오류가 발생한 줄 근처를 확인하고, 빠진 괄호나 따옴표, 세미콜론 등을 찾아서 고쳐 주세요.",
+  },
+  {
+    id: "type-error",
+    pattern: /TypeError|is not a function|Cannot read propert|Cannot set propert/i,
+    title: "타입(형식) 오류",
+    explanation: "이건 잘못된 형식의 값을 사용하려 할 때 생기는 문제입니다. 숫자를 넣어야 할 곳에 문자를 넣거나, 존재하지 않는 기능을 호출하려 할 때 나타나요.",
+    suggestedPrompt: "TypeError가 발생했어요. 오류가 발생한 변수나 함수가 올바른 값을 가지고 있는지 확인하고, undefined나 null 체크를 추가해서 해결해 주세요.",
+  },
+  {
+    id: "reference-error",
+    pattern: /ReferenceError|is not defined/i,
+    title: "정의되지 않은 변수",
+    explanation: "이건 아직 만들지 않은 변수나 함수를 사용하려 할 때 생기는 문제입니다. 이름을 부르기 전에 먼저 소개(정의)가 필요해요.",
+    suggestedPrompt: "ReferenceError가 발생했어요. 오류가 난 변수나 함수가 올바르게 선언되었는지, 사용 전에 정의가 됐는지 확인해서 해결해 주세요.",
+  },
+  {
+    id: "econnrefused",
+    pattern: /ECONNREFUSED|connect ECONNREFUSED|Connection refused/i,
+    title: "연결 거부",
+    explanation: "이건 서버나 데이터베이스에 연결하려 했지만 거부된 문제입니다. 전화를 걸었는데 상대방이 받지 않는 것과 같아요.",
+    suggestedPrompt: "ECONNREFUSED 연결 거부 오류가 발생했어요. 연결하려는 서버나 데이터베이스가 실행 중인지 확인하고, 호스트와 포트 설정이 올바른지 점검해 주세요.",
+  },
+  {
+    id: "out-of-memory",
+    pattern: /heap out of memory|JavaScript heap|ENOMEM|out of memory/i,
+    title: "메모리 부족",
+    explanation: "이건 프로그램이 사용할 수 있는 메모리(작업 공간)가 부족한 문제입니다. 책상이 너무 좁아서 더 이상 물건을 올려놓을 수 없는 것과 같아요.",
+    suggestedPrompt: "메모리 부족 오류가 발생했어요. Node.js의 메모리 한도를 늘리거나(--max-old-space-size 옵션), 메모리 누수가 있는지 확인해서 해결해 주세요.",
+  },
+  {
+    id: "network-error",
+    pattern: /Network Error|fetch failed|ENETUNREACH|getaddrinfo/i,
+    title: "네트워크 오류",
+    explanation: "이건 인터넷 연결이나 서버 통신 중 문제가 생긴 것입니다. 도로가 막혀서 택배가 배달되지 못하는 상황과 같아요.",
+    suggestedPrompt: "네트워크 오류가 발생했어요. 인터넷 연결 상태를 확인하고, API 주소나 URL이 올바른지, 서버가 정상 작동 중인지 점검해 주세요.",
+  },
+  {
+    id: "env-missing",
+    pattern: /process\.env\.|\.env|environment variable|missing.*key|api.*key.*not/i,
+    title: "환경 변수 누락",
+    explanation: "이건 API 키나 비밀번호 같은 중요한 설정값이 빠져있는 문제입니다. 자물쇠를 열 열쇠가 없는 것과 같아요.",
+    suggestedPrompt: "환경 변수 누락 오류가 발생했어요. .env 파일이 존재하는지 확인하고, 필요한 환경 변수(API 키 등)가 올바르게 설정되어 있는지 점검해 주세요.",
+  },
+];
+
+export function translateError(errorMessage: string): TranslateErrorResult {
+  const trimmed = errorMessage.trim();
+
+  for (const pattern of ERROR_PATTERNS) {
+    if (pattern.pattern.test(trimmed)) {
+      return {
+        matched: true,
+        errorId: pattern.id,
+        title: pattern.title,
+        explanation: pattern.explanation,
+        suggestedPrompt: `${pattern.suggestedPrompt}\n\n에러 내용:\n${trimmed}`,
+      };
+    }
+  }
+
+  // Generic fallback
+  return {
+    matched: false,
+    title: "알 수 없는 오류",
+    explanation: "이 오류의 정확한 유형은 파악하기 어렵지만, Claude Code에게 전달하면 분석해줄 수 있어요.",
+    suggestedPrompt: `다음 오류가 발생했어요. 원인을 분석하고 해결 방법을 알려주세요:\n\n${trimmed}`,
+  };
+}
+
 export function buildClaudePrompt(input: PromptBuilderInput): string {
   const typeOption = PROJECT_TYPE_OPTIONS.find(
     (o) => o.value === input.projectType
