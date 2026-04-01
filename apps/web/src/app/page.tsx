@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -18,11 +19,11 @@ export default function HomePage() {
           요리하듯 따라하면 어느새 나만의 앱이 완성됩니다.
         </p>
         <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
-          <Button size="lg" className="bg-purple-600 hover:bg-purple-700 text-white px-8">
-            레시피 시작하기
+          <Button size="lg" className="bg-purple-600 hover:bg-purple-700 text-white px-8" asChild>
+            <Link href="/builder">레시피 시작하기</Link>
           </Button>
-          <Button size="lg" variant="outline" className="px-8">
-            예시 보기
+          <Button size="lg" variant="outline" className="px-8" asChild>
+            <Link href="/builder">예시 보기</Link>
           </Button>
         </div>
       </section>
