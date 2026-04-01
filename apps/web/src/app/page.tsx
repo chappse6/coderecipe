@@ -4,9 +4,26 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 
 export default function HomePage() {
   return (
-    <main className="min-h-screen bg-gradient-to-br from-purple-50 to-indigo-100 dark:from-gray-950 dark:to-gray-900">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-indigo-100 dark:from-gray-950 dark:to-gray-900">
+      {/* Nav */}
+      <nav className="sticky top-0 z-50 border-b border-purple-100 bg-white/80 backdrop-blur-sm dark:border-gray-800 dark:bg-gray-950/80">
+        <div className="container mx-auto flex items-center justify-between px-4 py-3">
+          <Link href="/" className="flex items-center gap-2 font-bold text-gray-900 dark:text-white">
+            <span className="text-xl">🍳</span>
+            <span>CodeRecipe</span>
+          </Link>
+          <div className="flex items-center gap-1 sm:gap-2">
+            <Link href="/setup" className="rounded-md px-3 py-1.5 text-sm text-gray-600 hover:bg-purple-50 hover:text-purple-700 dark:text-gray-400 dark:hover:bg-gray-800">환경 진단</Link>
+            <Link href="/builder" className="rounded-md px-3 py-1.5 text-sm text-gray-600 hover:bg-purple-50 hover:text-purple-700 dark:text-gray-400 dark:hover:bg-gray-800">프롬프트 빌더</Link>
+            <Link href="/error-translator" className="rounded-md px-3 py-1.5 text-sm text-gray-600 hover:bg-red-50 hover:text-red-600 dark:text-gray-400 dark:hover:bg-gray-800">에러 번역기</Link>
+            <Link href="/glossary" className="hidden rounded-md px-3 py-1.5 text-sm text-gray-600 hover:bg-purple-50 hover:text-purple-700 dark:text-gray-400 dark:hover:bg-gray-800 sm:block">용어 사전</Link>
+          </div>
+        </div>
+      </nav>
+
+      <main>
       {/* Hero Section */}
-      <section className="container mx-auto px-4 py-24 text-center">
+      <section className="container mx-auto px-4 py-20 text-center">
         <div className="mb-6 inline-flex items-center rounded-full border border-purple-200 bg-purple-50 px-4 py-1.5 text-sm text-purple-700 dark:border-purple-800 dark:bg-purple-950 dark:text-purple-300">
           🍳 코딩 레시피로 누구나 개발자가 될 수 있어요
         </div>
@@ -26,6 +43,11 @@ export default function HomePage() {
             <Link href="/setup">환경 진단 먼저</Link>
           </Button>
         </div>
+
+        {/* Social proof */}
+        <p className="mt-8 text-sm text-gray-400 dark:text-gray-500">
+          코딩 경험 없어도 괜찮아요 · 5분이면 시작할 수 있어요 · 완전 무료
+        </p>
       </section>
 
       {/* Quick Access Section */}
@@ -76,9 +98,70 @@ export default function HomePage() {
           ))}
         </div>
       </section>
-    </main>
+
+      {/* How it works */}
+      <section className="container mx-auto px-4 pb-24">
+        <h2 className="mb-12 text-center text-3xl font-bold text-gray-900 dark:text-white">
+          3단계로 앱이 완성돼요
+        </h2>
+        <div className="grid gap-6 sm:grid-cols-3">
+          {steps.map((s, i) => (
+            <div key={s.title} className="relative text-center">
+              {i < steps.length - 1 && (
+                <div className="absolute left-[calc(50%+3rem)] top-8 hidden h-0.5 w-[calc(100%-6rem)] bg-purple-200 dark:bg-purple-800 sm:block" />
+              )}
+              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-purple-100 text-3xl dark:bg-purple-900/40">
+                {s.icon}
+              </div>
+              <div className="mb-1 text-xs font-bold uppercase tracking-widest text-purple-500 dark:text-purple-400">
+                {i + 1}단계
+              </div>
+              <h3 className="mb-2 text-lg font-bold text-gray-900 dark:text-white">{s.title}</h3>
+              <p className="text-sm text-gray-500 dark:text-gray-400">{s.description}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+      </main>
+
+      {/* Footer */}
+      <footer className="border-t border-purple-100 bg-white py-8 dark:border-gray-800 dark:bg-gray-950">
+        <div className="container mx-auto px-4 text-center">
+          <p className="mb-2 text-sm font-semibold text-gray-700 dark:text-gray-300">
+            🍳 CodeRecipe
+          </p>
+          <p className="text-xs text-gray-400 dark:text-gray-500">
+            코딩을 몰라도 AI와 함께라면 누구나 앱을 만들 수 있어요.
+          </p>
+          <div className="mt-4 flex justify-center gap-4 text-xs text-gray-400 dark:text-gray-500">
+            <Link href="/setup" className="hover:text-purple-600 dark:hover:text-purple-400">환경 진단</Link>
+            <Link href="/builder" className="hover:text-purple-600 dark:hover:text-purple-400">프롬프트 빌더</Link>
+            <Link href="/error-translator" className="hover:text-red-500">에러 번역기</Link>
+            <Link href="/glossary" className="hover:text-purple-600 dark:hover:text-purple-400">용어 사전</Link>
+          </div>
+        </div>
+      </footer>
+    </div>
   );
 }
+
+const steps = [
+  {
+    icon: "🔧",
+    title: "환경 설정",
+    description: "필요한 프로그램을 확인하고 설치해요. 클릭 몇 번으로 끝나요.",
+  },
+  {
+    icon: "✨",
+    title: "레시피 만들기",
+    description: "만들고 싶은 앱을 설명하면 Claude Code 프롬프트가 자동으로 완성돼요.",
+  },
+  {
+    icon: "🚀",
+    title: "앱 완성",
+    description: "만들어진 프롬프트를 Claude Code에 붙여넣으면 AI가 코드를 작성해줘요.",
+  },
+];
 
 const features = [
   {

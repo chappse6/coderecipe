@@ -1,10 +1,17 @@
 {
   "name": "@coderecipe/mcp-plugin",
   "version": "0.1.0",
-  "private": true,
+  "description": "CodeRecipe MCP 플러그인 — Claude Code에서 앱 제작 레시피와 에러 번역 기능을 사용하세요",
+  "keywords": ["mcp", "claude-code", "coderecipe", "korean", "no-code"],
+  "license": "MIT",
   "type": "module",
+  "files": ["dist"],
   "bin": {
     "coderecipe-mcp": "./dist/index.js"
+  },
+  "main": "./dist/index.js",
+  "exports": {
+    ".": "./dist/index.js"
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
