@@ -23,8 +23,32 @@ export default function HomePage() {
             <Link href="/builder">레시피 시작하기</Link>
           </Button>
           <Button size="lg" variant="outline" className="px-8" asChild>
-            <Link href="/builder">예시 보기</Link>
+            <Link href="/setup">환경 진단 먼저</Link>
           </Button>
+        </div>
+      </section>
+
+      {/* Quick Access Section */}
+      <section className="container mx-auto px-4 pb-12">
+        <div className="grid gap-4 sm:grid-cols-3">
+          <Link href="/setup" className="group rounded-2xl border-2 border-purple-100 bg-white p-6 shadow-sm hover:border-purple-400 hover:shadow-md transition-all dark:bg-gray-800 dark:border-gray-700">
+            <div className="mb-3 text-3xl">🔧</div>
+            <h3 className="mb-1 font-bold text-gray-900 dark:text-white">환경 진단</h3>
+            <p className="text-sm text-gray-500 dark:text-gray-400">필수 프로그램 설치 여부 확인 + 단계별 설치 가이드</p>
+            <span className="mt-3 inline-block text-sm font-medium text-purple-600 group-hover:underline dark:text-purple-400">시작하기 →</span>
+          </Link>
+          <Link href="/builder" className="group rounded-2xl border-2 border-purple-100 bg-white p-6 shadow-sm hover:border-purple-400 hover:shadow-md transition-all dark:bg-gray-800 dark:border-gray-700">
+            <div className="mb-3 text-3xl">✨</div>
+            <h3 className="mb-1 font-bold text-gray-900 dark:text-white">프롬프트 빌더</h3>
+            <p className="text-sm text-gray-500 dark:text-gray-400">질문 3개로 Claude Code 프롬프트 자동 생성</p>
+            <span className="mt-3 inline-block text-sm font-medium text-purple-600 group-hover:underline dark:text-purple-400">시작하기 →</span>
+          </Link>
+          <Link href="/glossary" className="group rounded-2xl border-2 border-purple-100 bg-white p-6 shadow-sm hover:border-purple-400 hover:shadow-md transition-all dark:bg-gray-800 dark:border-gray-700">
+            <div className="mb-3 text-3xl">📚</div>
+            <h3 className="mb-1 font-bold text-gray-900 dark:text-white">용어 사전</h3>
+            <p className="text-sm text-gray-500 dark:text-gray-400">개발 용어를 쉬운 한국어로 설명해 드려요</p>
+            <span className="mt-3 inline-block text-sm font-medium text-purple-600 group-hover:underline dark:text-purple-400">보러 가기 →</span>
+          </Link>
         </div>
       </section>
 
