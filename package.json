@@ -1,0 +1,21 @@
+{
+  "name": "coderecipe",
+  "private": true,
+  "version": "0.1.0",
+  "description": "코딩을 모르는 일반인이 Claude Code로 앱/웹사이트를 만들 수 있게 도와주는 웹 서비스 + MCP 플러그인",
+  "scripts": {
+    "dev": "pnpm --filter web dev",
+    "build": "pnpm -r build",
+    "lint": "pnpm -r lint",
+    "typecheck": "pnpm -r typecheck",
+    "clean": "pnpm -r clean"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.5"
+  },
+  "engines": {
+    "node": ">=20",
+    "pnpm": ">=9"
+  },
+  "packageManager": "pnpm@9.15.0"
+}
