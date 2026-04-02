@@ -10,3 +10,4 @@ build
 .turbo
 .cache
 .claude/settings.local.json
+.gstack/
