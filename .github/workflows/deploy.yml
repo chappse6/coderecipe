@@ -35,7 +35,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build
-        run: pnpm --filter web run build
+        run: pnpm --filter @coderecipe/shared build && pnpm --filter web run build
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
