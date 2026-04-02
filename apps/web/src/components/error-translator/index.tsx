@@ -57,9 +57,9 @@ export function ErrorTranslator() {
   return (
     <div className="mx-auto max-w-2xl">
       {/* Input Section */}
-      <Card className="mb-6 border border-gray-200 shadow-sm dark:border-gray-800">
+      <Card className="mb-6 border border-amber-100 shadow-sm dark:border-stone-700">
         <CardHeader className="pb-2">
-          <CardTitle className="text-base font-semibold text-gray-900 dark:text-white">
+          <CardTitle className="text-base font-semibold text-stone-800 dark:text-stone-100">
             에러 메시지를 붙여넣으세요
           </CardTitle>
         </CardHeader>
@@ -69,11 +69,11 @@ export function ErrorTranslator() {
             onChange={(e) => setErrorInput(e.target.value)}
             placeholder={`예시:\nERROR in ./src/index.js\nSyntaxError: Unexpected token '{'`}
             rows={5}
-            className="w-full resize-none rounded-lg border border-gray-200 px-4 py-3 text-sm font-mono outline-none transition focus:border-gray-400 focus:ring-2 focus:ring-gray-100 dark:border-gray-700 dark:bg-gray-900 dark:text-white dark:focus:ring-gray-800"
+            className="w-full resize-none rounded-lg border border-amber-100 px-4 py-3 text-sm font-mono outline-none transition focus:border-amber-400 focus:ring-2 focus:ring-amber-100 dark:border-stone-600 dark:bg-stone-900 dark:text-stone-100 dark:focus:ring-amber-900"
           />
 
           <div className="mb-4 mt-3">
-            <p className="mb-2 text-xs text-gray-400 dark:text-gray-500">
+            <p className="mb-2 text-xs text-stone-400 dark:text-stone-500">
               자주 나오는 에러 예시:
             </p>
             <div className="flex flex-wrap gap-2">
@@ -82,7 +82,7 @@ export function ErrorTranslator() {
                   key={ex}
                   type="button"
                   onClick={() => handleExample(ex)}
-                  className="rounded-md border border-gray-200 bg-gray-50 px-3 py-1 text-xs text-gray-600 transition-colors hover:border-gray-300 hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700"
+                  className="rounded-md border border-amber-100 bg-amber-50 px-3 py-1 text-xs text-stone-600 transition-colors hover:border-amber-200 hover:bg-amber-100 dark:border-stone-600 dark:bg-stone-700 dark:text-stone-400 dark:hover:bg-stone-600"
                 >
                   {ex.length > 40 ? ex.slice(0, 40) + "…" : ex}
                 </button>
@@ -94,7 +94,7 @@ export function ErrorTranslator() {
             <Button
               onClick={handleTranslate}
               disabled={!errorInput.trim()}
-              className="flex-1 gap-2 bg-gray-900 text-white hover:bg-gray-800 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-100"
+              className="flex-1 gap-2 bg-amber-400 text-stone-800 hover:bg-amber-500"
             >
               <Search className="h-4 w-4" />
               에러 번역하기
@@ -112,15 +112,15 @@ export function ErrorTranslator() {
       {result && (
         <div className="animate-in fade-in space-y-4 duration-300">
           {/* Explanation */}
-          <Card className="border border-gray-200 shadow-sm dark:border-gray-800">
+          <Card className="border border-amber-100 shadow-sm dark:border-stone-700">
             <CardContent className="px-6 py-5">
               <div className="flex items-start gap-3">
                 <AlertCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-red-500 dark:text-red-400" />
                 <div>
-                  <p className="mb-1 font-semibold text-gray-900 dark:text-white">
+                  <p className="mb-1 font-semibold text-stone-800 dark:text-stone-100">
                     {result.title}
                   </p>
-                  <p className="text-sm leading-relaxed text-gray-600 dark:text-gray-300">
+                  <p className="text-sm leading-relaxed text-stone-600 dark:text-stone-300">
                     {result.explanation}
                   </p>
                 </div>
@@ -129,12 +129,12 @@ export function ErrorTranslator() {
           </Card>
 
           {/* Suggested Prompt */}
-          <Card className="border border-gray-200 shadow-sm dark:border-gray-800">
+          <Card className="border border-amber-100 shadow-sm dark:border-stone-700">
             <CardContent className="px-6 py-5">
               <div className="mb-3 flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <MessageSquare className="h-4 w-4 text-gray-400" />
-                  <p className="font-semibold text-gray-900 dark:text-white">
+                  <MessageSquare className="h-4 w-4 text-stone-400" />
+                  <p className="font-semibold text-stone-800 dark:text-stone-100">
                     Claude Code에게 이렇게 말하세요
                   </p>
                 </div>
@@ -144,7 +144,7 @@ export function ErrorTranslator() {
                   className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${
                     copied
                       ? "bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300"
-                      : "bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+                      : "bg-stone-100 text-stone-600 hover:bg-stone-200 dark:bg-stone-700 dark:text-stone-300 dark:hover:bg-stone-600"
                   }`}
                 >
                   {copied ? (
@@ -158,8 +158,8 @@ export function ErrorTranslator() {
                   )}
                 </button>
               </div>
-              <div className="rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 dark:border-gray-700 dark:bg-gray-900">
-                <pre className="whitespace-pre-wrap font-mono text-sm leading-relaxed text-gray-800 dark:text-gray-200">
+              <div className="rounded-lg border border-amber-100 bg-amber-50 px-4 py-3 dark:border-stone-700 dark:bg-stone-900">
+                <pre className="whitespace-pre-wrap font-mono text-sm leading-relaxed text-stone-800 dark:text-stone-200">
                   {result.suggestedPrompt}
                 </pre>
               </div>
@@ -167,8 +167,8 @@ export function ErrorTranslator() {
           </Card>
 
           {/* Hint */}
-          <div className="flex items-start gap-2 rounded-lg border border-gray-200 px-4 py-3 text-sm text-gray-600 dark:border-gray-700 dark:text-gray-400">
-            <Info className="mt-0.5 h-4 w-4 flex-shrink-0 text-gray-400" />
+          <div className="flex items-start gap-2 rounded-lg border border-amber-100 px-4 py-3 text-sm text-stone-600 dark:border-stone-700 dark:text-stone-400">
+            <Info className="mt-0.5 h-4 w-4 flex-shrink-0 text-stone-400" />
             <p>
               위 내용을 복사해서 Claude Code 채팅창에 붙여넣으면 AI가 해결
               방법을 알려줍니다.
@@ -179,9 +179,9 @@ export function ErrorTranslator() {
 
       {/* Common Patterns Reference */}
       {!result && (
-        <Card className="border border-gray-200 shadow-sm dark:border-gray-800">
+        <Card className="border border-amber-100 shadow-sm dark:border-stone-700">
           <CardHeader className="pb-2">
-            <CardTitle className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-300">
+            <CardTitle className="flex items-center gap-2 text-sm font-semibold text-stone-700 dark:text-stone-300">
               <List className="h-4 w-4" />
               자주 나오는 에러 모음
             </CardTitle>
@@ -191,14 +191,14 @@ export function ErrorTranslator() {
               {ERROR_PATTERNS.map((p) => (
                 <div
                   key={p.id}
-                  className="flex items-start gap-3 rounded-lg border border-gray-100 px-4 py-2.5 dark:border-gray-800"
+                  className="flex items-start gap-3 rounded-lg border border-amber-100 px-4 py-2.5 dark:border-stone-700"
                 >
-                  <AlertCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-gray-400" />
+                  <AlertCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-stone-400" />
                   <div>
-                    <p className="text-sm font-medium text-gray-800 dark:text-gray-200">
+                    <p className="text-sm font-medium text-stone-800 dark:text-stone-200">
                       {p.title}
                     </p>
-                    <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
+                    <p className="mt-0.5 text-xs text-stone-500 dark:text-stone-400">
                       {p.explanation}
                     </p>
                   </div>

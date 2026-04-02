@@ -1,4 +1,17 @@
 
+## Design System
+
+This project uses the **Lemon Kitchen** palette. Full spec: `DESIGN.md` (project root).
+
+**Quick rules:**
+- Primary color: `amber-400` (`#FBBF24`) — buttons, CTA, logo accent
+- Accent color: `orange-500` (`#F97316`) — links, badges, secondary emphasis
+- Page background: `bg-amber-50 dark:bg-stone-800`
+- Card background: `bg-white dark:bg-stone-700`
+- Body text: `text-stone-700 dark:text-stone-100`
+- **NEVER use purple** — all purple classes must be replaced with amber/orange/stone equivalents
+- Primary button text must be `text-stone-800` (not white — yellow background needs dark text for contrast)
+
 ## Skill routing
 
 When the user's request matches an available skill, ALWAYS invoke it using the Skill

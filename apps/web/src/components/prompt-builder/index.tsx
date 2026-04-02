@@ -28,10 +28,10 @@ function StepIndicator({ current }: { current: Step }) {
           <div
             className={`flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold transition-colors ${
               i < idx
-                ? "bg-gray-900 text-white dark:bg-white dark:text-gray-900"
+                ? "bg-amber-400 text-stone-800"
                 : i === idx
-                  ? "bg-gray-900 text-white ring-2 ring-gray-300 dark:bg-white dark:text-gray-900 dark:ring-gray-600"
-                  : "bg-gray-100 text-gray-400 dark:bg-gray-800 dark:text-gray-500"
+                  ? "bg-stone-800 text-white ring-2 ring-stone-300 dark:bg-white dark:text-stone-900 dark:ring-stone-600"
+                  : "bg-stone-100 text-stone-400 dark:bg-stone-700 dark:text-stone-500"
             }`}
           >
             {i < idx ? "✓" : i + 1}
@@ -39,15 +39,15 @@ function StepIndicator({ current }: { current: Step }) {
           <span
             className={`hidden text-sm sm:block ${
               i === idx
-                ? "font-semibold text-gray-900 dark:text-white"
-                : "text-gray-400 dark:text-gray-500"
+                ? "font-semibold text-stone-800 dark:text-white"
+                : "text-stone-400 dark:text-stone-500"
             }`}
           >
             {label}
           </span>
           {i < labels.length - 1 && (
             <div
-              className={`h-0.5 w-6 sm:w-10 ${i < idx ? "bg-gray-900 dark:bg-white" : "bg-gray-200 dark:bg-gray-700"}`}
+              className={`h-0.5 w-6 sm:w-10 ${i < idx ? "bg-stone-800 dark:bg-white" : "bg-stone-200 dark:bg-stone-700"}`}
             />
           )}
         </div>
@@ -67,10 +67,10 @@ function StepType({
 }) {
   return (
     <div>
-      <h2 className="mb-2 text-xl font-bold text-gray-900 dark:text-white">
+      <h2 className="mb-2 text-xl font-bold text-stone-800 dark:text-white">
         무엇을 만들고 싶나요?
       </h2>
-      <p className="mb-6 text-sm text-gray-500 dark:text-gray-400">
+      <p className="mb-6 text-sm text-stone-500 dark:text-stone-400">
         가장 잘 맞는 유형을 골라보세요.
       </p>
       <div className="grid gap-3 sm:grid-cols-2">
@@ -79,16 +79,16 @@ function StepType({
             key={option.value}
             type="button"
             onClick={() => onSelect(option.value)}
-            className={`rounded-lg border px-5 py-4 text-left transition-all hover:border-gray-400 hover:shadow-sm ${
+            className={`rounded-lg border px-5 py-4 text-left transition-all hover:border-stone-400 hover:shadow-sm ${
               selected === option.value
-                ? "border-gray-900 bg-gray-50 dark:border-white dark:bg-gray-800"
-                : "border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900"
+                ? "border-amber-400 bg-amber-50 dark:border-amber-400 dark:bg-stone-700"
+                : "border-stone-200 bg-white dark:border-stone-600 dark:bg-stone-800"
             }`}
           >
-            <div className="mb-1 font-semibold text-gray-900 dark:text-white">
+            <div className="mb-1 font-semibold text-stone-800 dark:text-white">
               {option.label}
             </div>
-            <div className="text-sm text-gray-500 dark:text-gray-400">
+            <div className="text-sm text-stone-500 dark:text-stone-400">
               {option.description}
             </div>
           </button>
@@ -112,10 +112,10 @@ function StepFeatures({
   const features = FEATURES_BY_TYPE[projectType];
   return (
     <div>
-      <h2 className="mb-2 text-xl font-bold text-gray-900 dark:text-white">
+      <h2 className="mb-2 text-xl font-bold text-stone-800 dark:text-white">
         어떤 기능이 필요한가요?
       </h2>
-      <p className="mb-6 text-sm text-gray-500 dark:text-gray-400">
+      <p className="mb-6 text-sm text-stone-500 dark:text-stone-400">
         필요한 기능을 모두 선택하세요.
       </p>
       <div className="grid gap-2 sm:grid-cols-2">
@@ -126,17 +126,17 @@ function StepFeatures({
               key={feature.value}
               type="button"
               onClick={() => onToggle(feature.value)}
-              className={`flex items-center gap-3 rounded-lg border px-4 py-3 text-left transition-all hover:border-gray-400 ${
+              className={`flex items-center gap-3 rounded-lg border px-4 py-3 text-left transition-all hover:border-stone-400 ${
                 checked
-                  ? "border-gray-900 bg-gray-50 dark:border-white dark:bg-gray-800"
-                  : "border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900"
+                  ? "border-amber-400 bg-amber-50 dark:border-amber-400 dark:bg-stone-700"
+                  : "border-stone-200 bg-white dark:border-stone-600 dark:bg-stone-800"
               }`}
             >
               <div
                 className={`flex h-4 w-4 flex-shrink-0 items-center justify-center rounded border-2 transition-colors ${
                   checked
-                    ? "border-gray-900 bg-gray-900 text-white dark:border-white dark:bg-white dark:text-gray-900"
-                    : "border-gray-300 bg-white dark:border-gray-600 dark:bg-gray-800"
+                    ? "border-stone-800 bg-stone-800 text-white dark:border-white dark:bg-white dark:text-stone-800"
+                    : "border-stone-300 bg-white dark:border-stone-600 dark:bg-stone-800"
                 }`}
               >
                 {checked && (
@@ -155,7 +155,7 @@ function StepFeatures({
                   </svg>
                 )}
               </div>
-              <span className="text-sm font-medium text-gray-800 dark:text-gray-200">
+              <span className="text-sm font-medium text-stone-800 dark:text-stone-200">
                 {feature.label}
               </span>
             </button>
@@ -183,16 +183,16 @@ function StepReference({
 }) {
   return (
     <div>
-      <h2 className="mb-2 text-xl font-bold text-gray-900 dark:text-white">
+      <h2 className="mb-2 text-xl font-bold text-stone-800 dark:text-white">
         비슷한 서비스가 있나요?
       </h2>
-      <p className="mb-6 text-sm text-gray-500 dark:text-gray-400">
+      <p className="mb-6 text-sm text-stone-500 dark:text-stone-400">
         참고할 사이트 주소를 넣으면 더 정확한 결과를 얻을 수 있어요. 없어도
         괜찮아요.
       </p>
 
       <div className="mb-5">
-        <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">
+        <label className="mb-1.5 block text-sm font-medium text-stone-700 dark:text-stone-300">
           참고 사이트 주소 (선택)
         </label>
         <input
@@ -200,10 +200,10 @@ function StepReference({
           value={url}
           onChange={(e) => onUrlChange(e.target.value)}
           placeholder="예: https://www.naver.com"
-          className={`w-full rounded-lg border px-4 py-2.5 text-sm outline-none transition focus:ring-2 dark:bg-gray-900 dark:text-white ${
+          className={`w-full rounded-lg border px-4 py-2.5 text-sm outline-none transition focus:ring-2 dark:bg-stone-900 dark:text-white ${
             urlError
               ? "border-red-400 focus:border-red-400 focus:ring-red-100 dark:focus:ring-red-900"
-              : "border-gray-200 focus:border-gray-400 focus:ring-gray-100 dark:border-gray-700 dark:focus:ring-gray-800"
+              : "border-stone-200 focus:border-amber-400 focus:ring-amber-100 dark:border-stone-700 dark:focus:ring-amber-900"
           }`}
         />
         {urlError && (
@@ -214,7 +214,7 @@ function StepReference({
       </div>
 
       <div>
-        <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">
+        <label className="mb-1.5 block text-sm font-medium text-stone-700 dark:text-stone-300">
           추가로 하고 싶은 말 (선택)
         </label>
         <textarea
@@ -222,7 +222,7 @@ function StepReference({
           onChange={(e) => onDescriptionChange(e.target.value)}
           placeholder="예: 메인 색상은 초록색으로, 글씨는 크게 해주세요."
           rows={4}
-          className="w-full rounded-lg border border-gray-200 px-4 py-2.5 text-sm outline-none transition focus:border-gray-400 focus:ring-2 focus:ring-gray-100 dark:border-gray-700 dark:bg-gray-900 dark:text-white dark:focus:ring-gray-800"
+          className="w-full rounded-lg border border-stone-200 px-4 py-2.5 text-sm outline-none transition focus:border-amber-400 focus:ring-2 focus:ring-amber-100 dark:border-stone-700 dark:bg-stone-900 dark:text-white dark:focus:ring-amber-900"
         />
       </div>
     </div>
@@ -248,16 +248,16 @@ function StepResult({
 
   return (
     <div>
-      <h2 className="mb-2 text-xl font-bold text-gray-900 dark:text-white">
+      <h2 className="mb-2 text-xl font-bold text-stone-800 dark:text-white">
         레시피 완성
       </h2>
-      <p className="mb-4 text-sm text-gray-500 dark:text-gray-400">
+      <p className="mb-4 text-sm text-stone-500 dark:text-stone-400">
         아래 내용을 복사해서 Claude Code에 붙여넣으세요.
       </p>
 
-      <div className="mb-4 rounded-lg border border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-900">
-        <div className="flex items-center justify-between border-b border-gray-200 px-4 py-2 dark:border-gray-700">
-          <span className="text-xs font-medium text-gray-400 dark:text-gray-500">
+      <div className="mb-4 rounded-lg border border-stone-200 bg-stone-50 dark:border-stone-700 dark:bg-stone-900">
+        <div className="flex items-center justify-between border-b border-stone-200 px-4 py-2 dark:border-stone-700">
+          <span className="text-xs font-medium text-stone-400 dark:text-stone-500">
             Claude Code 프롬프트
           </span>
           <button
@@ -266,7 +266,7 @@ function StepResult({
             className={`flex items-center gap-1.5 rounded-md px-3 py-1 text-xs font-medium transition-colors ${
               copied
                 ? "bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300"
-                : "bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+                : "bg-stone-100 text-stone-600 hover:bg-stone-200 dark:bg-stone-800 dark:text-stone-300 dark:hover:bg-stone-700"
             }`}
           >
             {copied ? (
@@ -280,13 +280,13 @@ function StepResult({
             )}
           </button>
         </div>
-        <pre className="max-h-80 overflow-y-auto whitespace-pre-wrap px-4 py-4 text-sm text-gray-800 dark:text-gray-200">
+        <pre className="max-h-80 overflow-y-auto whitespace-pre-wrap px-4 py-4 text-sm text-stone-800 dark:text-stone-200">
           {prompt}
         </pre>
       </div>
 
-      <div className="flex items-start gap-2 rounded-lg border border-gray-200 px-4 py-3 text-sm text-gray-600 dark:border-gray-700 dark:text-gray-400">
-        <Info className="mt-0.5 h-4 w-4 flex-shrink-0 text-gray-400" />
+      <div className="flex items-start gap-2 rounded-lg border border-amber-100 px-4 py-3 text-sm text-stone-600 dark:border-stone-700 dark:text-stone-400">
+        <Info className="mt-0.5 h-4 w-4 flex-shrink-0 text-stone-400" />
         <p>
           Claude Code를 열고 위 내용을 붙여넣으면 AI가 코드를 만들어 줍니다.
         </p>
@@ -295,7 +295,7 @@ function StepResult({
       <button
         type="button"
         onClick={onRestart}
-        className="mt-4 text-sm text-gray-400 underline hover:text-gray-700 dark:text-gray-500 dark:hover:text-gray-300"
+        className="mt-4 text-sm text-stone-400 underline hover:text-stone-700 dark:text-stone-500 dark:hover:text-stone-300"
       >
         처음부터 다시 만들기
       </button>
@@ -366,7 +366,7 @@ export function PromptBuilder() {
     <div className="mx-auto max-w-2xl">
       <StepIndicator current={step} />
 
-      <Card className="border border-gray-200 shadow-sm dark:border-gray-800">
+      <Card className="border border-stone-200 shadow-sm dark:border-stone-700">
         <CardHeader className="pb-2">
           <CardTitle className="sr-only">프롬프트 빌더</CardTitle>
         </CardHeader>
@@ -409,7 +409,7 @@ export function PromptBuilder() {
               <Button
                 onClick={advance}
                 disabled={!canAdvance()}
-                className="bg-gray-900 text-white hover:bg-gray-800 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-100"
+                className="bg-amber-400 text-stone-800 hover:bg-amber-500"
               >
                 {step === "reference" ? "프롬프트 만들기" : "다음 →"}
               </Button>

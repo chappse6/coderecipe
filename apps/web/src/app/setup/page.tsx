@@ -10,14 +10,14 @@ export const metadata = {
 
 export default function SetupPage() {
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-950">
+    <div className="min-h-screen bg-white dark:bg-stone-950">
       <Nav />
       <div className="container mx-auto px-4 py-12">
         <div className="mb-10">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white sm:text-4xl">
+          <h1 className="text-3xl font-bold text-stone-800 dark:text-white sm:text-4xl">
             환경 진단
           </h1>
-          <p className="mt-2 max-w-xl text-gray-500 dark:text-gray-400">
+          <p className="mt-2 max-w-xl text-stone-500 dark:text-stone-400">
             Claude Code를 사용하려면 몇 가지 프로그램이 필요해요. 어떤 것이
             설치되어 있는지 확인해 볼게요.
           </p>
@@ -26,11 +26,11 @@ export default function SetupPage() {
         <EnvironmentChecker />
 
         <div className="mt-8">
-          <p className="text-sm text-gray-500 dark:text-gray-400">
+          <p className="text-sm text-stone-500 dark:text-stone-400">
             낯선 단어가 나오면?{" "}
             <Link
               href="/glossary"
-              className="font-medium text-purple-600 hover:underline dark:text-purple-400"
+              className="font-medium text-orange-500 hover:underline dark:text-amber-400"
             >
               개발 용어 사전 보기
             </Link>

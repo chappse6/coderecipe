@@ -8,14 +8,14 @@ export const metadata = {
 
 export default function GlossaryPage() {
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-950">
+    <div className="min-h-screen bg-white dark:bg-stone-950">
       <Nav />
       <div className="container mx-auto px-4 py-12">
         <div className="mb-10">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white sm:text-4xl">
+          <h1 className="text-3xl font-bold text-stone-800 dark:text-white sm:text-4xl">
             개발 용어 사전
           </h1>
-          <p className="mt-2 max-w-xl text-gray-500 dark:text-gray-400">
+          <p className="mt-2 max-w-xl text-stone-500 dark:text-stone-400">
             개발 용어가 어렵게 느껴지시나요? 일상적인 비유로 쉽게 설명해
             드릴게요.
           </p>
