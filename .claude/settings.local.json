@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "Bash('~/.claude/skills/gstack/bin/gstack-review-log' --branch main --skill plan-ceo-review --score 7 --outcome DONE_WITH_CONCERNS --notes '5 scopes accepted: unit tests, vercel analytics, referenceUrl validation, generate_recipe removal, 5 error patterns. Critical gap: generate_recipe dummy returns needed removal. Marketing copy check deferred to grep-and-fix inline. Design doc created. TODOS.md created.')"
+    ]
+  }
+}

@@ -1,6 +1,6 @@
 {
   "framework": "nextjs",
-  "buildCommand": "pnpm --filter web run build",
+  "buildCommand": "pnpm --filter @coderecipe/shared build && pnpm --filter web run build",
   "installCommand": "pnpm install",
   "outputDirectory": "apps/web/.next"
 }

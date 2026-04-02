@@ -173,11 +173,13 @@ function StepReference({
   description,
   onUrlChange,
   onDescriptionChange,
+  urlError,
 }: {
   url: string;
   description: string;
   onUrlChange: (v: string) => void;
   onDescriptionChange: (v: string) => void;
+  urlError?: string;
 }) {
   return (
     <div>
@@ -198,8 +200,11 @@ function StepReference({
           value={url}
           onChange={(e) => onUrlChange(e.target.value)}
           placeholder="예: https://www.naver.com"
-          className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm outline-none transition focus:border-purple-500 focus:ring-2 focus:ring-purple-200 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:ring-purple-800"
+          className={`w-full rounded-lg border px-4 py-2.5 text-sm outline-none transition focus:ring-2 dark:bg-gray-800 dark:text-white ${urlError ? "border-red-500 focus:border-red-500 focus:ring-red-200 dark:focus:ring-red-800" : "border-gray-300 focus:border-purple-500 focus:ring-purple-200 dark:border-gray-600 dark:focus:ring-purple-800"}`}
         />
+        {urlError && (
+          <p className="mt-1.5 text-sm text-red-600 dark:text-red-400">{urlError}</p>
+        )}
       </div>
 
       <div>
@@ -291,6 +296,7 @@ export function PromptBuilder() {
   const [referenceUrl, setReferenceUrl] = useState("");
   const [description, setDescription] = useState("");
   const [generatedPrompt, setGeneratedPrompt] = useState("");
+  const [urlError, setUrlError] = useState("");
 
   const toggleFeature = (value: string) => {
     setFeatures((prev) =>
@@ -313,7 +319,13 @@ export function PromptBuilder() {
         referenceUrl: referenceUrl.trim() || undefined,
         description: description.trim() || undefined,
       };
-      setGeneratedPrompt(buildClaudePrompt(input));
+      try {
+        setGeneratedPrompt(buildClaudePrompt(input));
+        setUrlError("");
+      } catch (e) {
+        setUrlError(e instanceof Error ? e.message : "URL을 확인해 주세요.");
+        return;
+      }
     }
     if (idx < STEP_ORDER.length - 1) {
       setStep(STEP_ORDER[idx + 1]);
@@ -332,6 +344,7 @@ export function PromptBuilder() {
     setReferenceUrl("");
     setDescription("");
     setGeneratedPrompt("");
+    setUrlError("");
   };
 
   return (
@@ -357,8 +370,9 @@ export function PromptBuilder() {
             <StepReference
               url={referenceUrl}
               description={description}
-              onUrlChange={setReferenceUrl}
+              onUrlChange={(v) => { setReferenceUrl(v); setUrlError(""); }}
               onDescriptionChange={setDescription}
+              urlError={urlError}
             />
           )}
           {step === "result" && (

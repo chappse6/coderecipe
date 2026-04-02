@@ -291,42 +291,6 @@ export const GLOSSARY_TAGS = [
   "전체", "기본", "Git", "환경", "개발", "도구", "배포", "보안", "AI", "네트워크",
 ];
 
-export interface Recipe {
-  id: string;
-  title: string;
-  description: string;
-  steps: RecipeStep[];
-  tags: string[];
-  difficulty: "beginner" | "intermediate" | "advanced";
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface RecipeStep {
-  order: number;
-  instruction: string;
-  code?: string;
-  language?: string;
-}
-
-export interface GenerateRecipeRequest {
-  prompt: string;
-  difficulty?: Recipe["difficulty"];
-  tags?: string[];
-}
-
-export interface GenerateRecipeResponse {
-  recipe: Recipe;
-}
-
-export function formatDate(date: Date): string {
-  return date.toLocaleDateString("ko-KR", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-}
-
 // ── Prompt Builder Types ──────────────────────────────────────────────────────
 
 export type ProjectType = "website" | "chrome-extension" | "chatbot" | "webapp";
@@ -517,6 +481,41 @@ export const ERROR_PATTERNS: ErrorPattern[] = [
     explanation: "이건 API 키나 비밀번호 같은 중요한 설정값이 빠져있는 문제입니다. 자물쇠를 열 열쇠가 없는 것과 같아요.",
     suggestedPrompt: "환경 변수 누락 오류가 발생했어요. .env 파일이 존재하는지 확인하고, 필요한 환경 변수(API 키 등)가 올바르게 설정되어 있는지 점검해 주세요.",
   },
+  {
+    id: "unhandled-rejection",
+    pattern: /Uncaught \(in promise\)|UnhandledPromiseRejection|unhandledrejection/i,
+    title: "처리되지 않은 비동기 오류",
+    explanation: "이건 약속(Promise)이 실패했는데 아무도 그 실패를 처리하지 않아서 생기는 문제예요. 음식 배달을 시켰는데 취소됐을 때 아무도 알림을 받지 못한 것과 같아요.",
+    suggestedPrompt: "Unhandled Promise Rejection 에러가 발생했어요. 비동기 함수에 catch 처리가 빠져있거나 await 사용 시 try-catch가 없는지 확인해서 해결해 주세요.",
+  },
+  {
+    id: "react-key-error",
+    pattern: /Each child in a list should have a unique.*key|key.*prop/i,
+    title: "React 리스트 key 누락",
+    explanation: "이건 React에서 목록을 만들 때 각 항목에 고유한 이름표(key)를 붙여줘야 하는데 빠진 문제예요.",
+    suggestedPrompt: "React key prop 경고가 발생했어요. 리스트를 렌더링하는 map() 함수에서 각 항목에 key={고유값} 속성을 추가해서 해결해 주세요.",
+  },
+  {
+    id: "fetch-http-error",
+    pattern: /HTTP error.*status|fetch.*failed|Failed to fetch/i,
+    title: "API 통신 오류",
+    explanation: "이건 서버에 데이터를 요청했는데 서버가 오류를 반환한 문제예요. 택배를 주문했는데 배송 불가 지역이라 거절당한 것과 같아요.",
+    suggestedPrompt: "HTTP 통신 오류가 발생했어요. API 주소가 올바른지, 서버가 정상 동작 중인지, 인증 토큰이 유효한지 확인해서 해결해 주세요.",
+  },
+  {
+    id: "dom-exception",
+    pattern: /DOMException|NotAllowedError|NotSupportedError/i,
+    title: "브라우저 기능 접근 오류",
+    explanation: "이건 카메라, 마이크, 클립보드 같은 브라우저 기능에 접근하려 했는데 권한이 없거나 지원하지 않는 환경이라서 생기는 문제예요.",
+    suggestedPrompt: "DOMException 오류가 발생했어요. 브라우저 권한 설정을 확인하고, 해당 기능이 현재 환경(HTTP vs HTTPS 등)에서 지원되는지 점검해 주세요.",
+  },
+  {
+    id: "react-update-error",
+    pattern: /Cannot update a component.*while rendering|Too many re-renders/i,
+    title: "React 렌더링 루프 오류",
+    explanation: "이건 화면을 그리는 도중에 화면을 다시 그리라는 명령을 내려서 무한 반복이 생기는 문제예요. 거울 두 개를 마주보게 놓은 것처럼 계속 반복돼요.",
+    suggestedPrompt: "React 렌더링 오류가 발생했어요. useEffect나 이벤트 핸들러 밖에서 setState를 호출하고 있지 않은지, 의존성 배열이 올바른지 확인해서 해결해 주세요.",
+  },
 ];
 
 export function translateError(errorMessage: string): TranslateErrorResult {
@@ -548,6 +547,19 @@ export function buildClaudePrompt(input: PromptBuilderInput): string {
     (o) => o.value === input.projectType
   );
   const featureOptions = FEATURES_BY_TYPE[input.projectType];
+  if (!featureOptions) {
+    throw new Error(`유효하지 않은 프로젝트 유형입니다: ${input.projectType}`);
+  }
+  if (input.referenceUrl && input.referenceUrl.trim()) {
+    if (
+      !input.referenceUrl.startsWith("http://") &&
+      !input.referenceUrl.startsWith("https://")
+    ) {
+      throw new Error(
+        "referenceUrl은 http:// 또는 https://로 시작해야 합니다"
+      );
+    }
+  }
   const selectedFeatures = featureOptions.filter((f) =>
     input.features.includes(f.value)
   );
