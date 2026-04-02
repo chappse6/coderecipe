@@ -33,6 +33,36 @@ describe("translateError", () => {
     expect(result.matched).toBe(false);
     expect(result.errorId).toBeUndefined();
   });
+
+  it("matches unhandled promise rejection", () => {
+    const result = translateError("UnhandledPromiseRejection: some database error occurred");
+    expect(result.matched).toBe(true);
+    expect(result.errorId).toBe("unhandled-rejection");
+  });
+
+  it("matches react key error", () => {
+    const result = translateError("Each child in a list should have a unique key prop.");
+    expect(result.matched).toBe(true);
+    expect(result.errorId).toBe("react-key-error");
+  });
+
+  it("matches fetch HTTP error", () => {
+    const result = translateError("Failed to fetch");
+    expect(result.matched).toBe(true);
+    expect(result.errorId).toBe("fetch-http-error");
+  });
+
+  it("matches DOMException", () => {
+    const result = translateError("DOMException: NotAllowedError: The request is not allowed.");
+    expect(result.matched).toBe(true);
+    expect(result.errorId).toBe("dom-exception");
+  });
+
+  it("matches react too many re-renders", () => {
+    const result = translateError("Too many re-renders. React limits the number of renders.");
+    expect(result.matched).toBe(true);
+    expect(result.errorId).toBe("react-update-error");
+  });
 });
 
 // ── buildClaudePrompt ──────────────────────────────────────────────────────────
@@ -75,6 +105,15 @@ describe("buildClaudePrompt", () => {
       projectType: "website",
       features: [],
       referenceUrl: "",
+    });
+    expect(result).not.toContain("## 참고 서비스");
+  });
+
+  it("omits 참고 서비스 section when referenceUrl is whitespace-only", () => {
+    const result = buildClaudePrompt({
+      projectType: "website",
+      features: [],
+      referenceUrl: "   ",
     });
     expect(result).not.toContain("## 참고 서비스");
   });

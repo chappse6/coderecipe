@@ -8,3 +8,4 @@ build
 *.tsbuildinfo
 .turbo
 .cache
+.claude/settings.local.json

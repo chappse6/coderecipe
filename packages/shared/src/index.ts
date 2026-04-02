@@ -550,10 +550,11 @@ export function buildClaudePrompt(input: PromptBuilderInput): string {
   if (!featureOptions) {
     throw new Error(`유효하지 않은 프로젝트 유형입니다: ${input.projectType}`);
   }
-  if (input.referenceUrl && input.referenceUrl.trim()) {
+  const trimmedReferenceUrl = input.referenceUrl?.trim() || undefined;
+  if (trimmedReferenceUrl) {
     if (
-      !input.referenceUrl.startsWith("http://") &&
-      !input.referenceUrl.startsWith("https://")
+      !trimmedReferenceUrl.startsWith("http://") &&
+      !trimmedReferenceUrl.startsWith("https://")
     ) {
       throw new Error(
         "referenceUrl은 http:// 또는 https://로 시작해야 합니다"
@@ -570,8 +571,8 @@ export function buildClaudePrompt(input: PromptBuilderInput): string {
       ? selectedFeatures.map((f) => `- ${f.label}`).join("\n")
       : "- 기본 기능";
 
-  const referenceSection = input.referenceUrl
-    ? `\n## 참고 서비스\n${input.referenceUrl}`
+  const referenceSection = trimmedReferenceUrl
+    ? `\n## 참고 서비스\n${trimmedReferenceUrl}`
     : "";
 
   const descriptionSection = input.description

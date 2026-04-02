@@ -120,12 +120,17 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         );
       }
 
-      const prompt = buildClaudePrompt({
-        projectType,
-        features,
-        referenceUrl,
-        description,
-      });
+      let prompt: string;
+      try {
+        prompt = buildClaudePrompt({
+          projectType,
+          features,
+          referenceUrl,
+          description,
+        });
+      } catch (e) {
+        throw new Error(e instanceof Error ? e.message : "프롬프트 생성 중 오류가 발생했습니다.");
+      }
 
       return {
         content: [
