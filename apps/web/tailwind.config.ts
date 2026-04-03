@@ -11,7 +11,8 @@ const config: Config = {
     extend: {
       colors: {
         recipe: {
-          primary: { DEFAULT: "#FBBF24", hover: "#F59E0B" },
+          primary: { DEFAULT: "#FCCA59", hover: "#F5BC3B" },
+          card: "#99B7F5",
           accent: { DEFAULT: "#F97316", hover: "#EA580C" },
           bg: {
             light: "#FFFBEB",

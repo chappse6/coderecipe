@@ -8,6 +8,7 @@ import {
   type OsOption,
   type DevTool,
 } from "@coderecipe/shared";
+import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
@@ -34,9 +35,9 @@ function OsSelector({
             key={opt.value}
             type="button"
             onClick={() => onSelect(opt.value)}
-            className={`rounded-lg border-2 p-5 text-center transition-all hover:border-amber-400 hover:shadow-sm ${
+            className={`rounded-lg border-2 p-5 text-center transition-all hover:border-stone-400 hover:shadow-sm ${
               selected === opt.value
-                ? "border-amber-400 bg-amber-50 dark:bg-stone-700"
+                ? "border-stone-800 bg-stone-50 dark:border-stone-300 dark:bg-stone-700"
                 : "border-stone-200 bg-white dark:border-stone-600 dark:bg-stone-800"
             }`}
           >
@@ -119,7 +120,7 @@ function ToolCard({
               <button
                 type="button"
                 onClick={() => setExpanded((v) => !v)}
-                className="flex-shrink-0 rounded bg-amber-100 px-2.5 py-1 text-xs font-medium text-amber-700 hover:bg-amber-200 dark:bg-amber-900/30 dark:text-amber-300 dark:hover:bg-amber-900/50"
+                className="flex-shrink-0 rounded bg-stone-100 px-2.5 py-1 text-xs font-medium text-stone-700 hover:bg-stone-200 dark:bg-stone-700 dark:text-stone-300 dark:hover:bg-stone-600"
               >
                 {expanded ? "닫기 ▲" : "설치 방법 ▼"}
               </button>
@@ -139,14 +140,14 @@ function ToolCard({
           </div>
 
           {!checked && expanded && (
-            <div className="mt-4 rounded-lg border border-amber-100 bg-amber-50 p-3 dark:border-amber-900/30 dark:bg-amber-950/20">
-              <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-amber-600 dark:text-amber-400">
+            <div className="mt-4 rounded-lg border border-stone-200 bg-stone-50 p-3 dark:border-stone-600 dark:bg-stone-800/50">
+              <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-stone-600 dark:text-stone-400">
                 설치 방법
               </p>
               <ol className="space-y-3">
                 {guide.map((s) => (
                   <li key={s.step} className="flex gap-3">
-                    <span className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-amber-400 text-xs font-bold text-stone-800">
+                    <span className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-recipe-primary text-xs font-bold text-stone-800">
                       {s.step}
                     </span>
                     <div className="min-w-0 flex-1">
@@ -189,7 +190,7 @@ function ProgressBar({ checked, total }: { checked: number; total: number }) {
       </div>
       <div className="h-2 overflow-hidden rounded-full bg-stone-200 dark:bg-stone-700">
         <div
-          className="h-2 rounded-full bg-amber-400 transition-all duration-500"
+          className="h-2 rounded-full bg-recipe-primary transition-all duration-500"
           style={{ width: `${pct}%` }}
         />
       </div>
@@ -237,18 +238,18 @@ export function EnvironmentChecker() {
               </div>
 
               {allDone && (
-                <div className="mt-6 rounded-lg border border-green-200 bg-green-50 p-5 text-center dark:border-green-800 dark:bg-green-950/30">
-                  <p className="font-bold text-green-700 dark:text-green-400">
+                <div className="mt-6 text-center">
+                  <p className="font-bold text-stone-800 dark:text-stone-100">
                     환경 설정 완료
                   </p>
-                  <p className="mt-1 text-sm text-green-600 dark:text-green-500">
+                  <p className="mt-1 text-sm text-stone-500 dark:text-stone-400">
                     이제 Claude Code로 앱을 만들 준비가 됐어요.
                   </p>
                   <Button
-                    className="mt-4 bg-amber-400 text-stone-800 hover:bg-amber-500"
+                    className="mt-4 bg-recipe-primary text-stone-800 hover:bg-recipe-primary-hover"
                     asChild
                   >
-                    <a href="/builder">프롬프트 만들러 가기 →</a>
+                    <Link href="/builder">프롬프트 만들러 가기 →</Link>
                   </Button>
                 </div>
               )}

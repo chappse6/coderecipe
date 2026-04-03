@@ -2,13 +2,15 @@ import React from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Nav } from "@/components/layout/nav";
+import TerminalTyping from "@/components/terminal-typing";
+import { ComingSoonCard } from "@/components/coming-soon-card";
 import {
   Settings2,
   Wand2,
   AlertCircle,
   BookOpen,
-  ArrowRight,
-  Terminal,
+  MonitorSmartphone,
+  HelpCircle,
 } from "lucide-react";
 
 export default function HomePage() {
@@ -18,7 +20,7 @@ export default function HomePage() {
 
       <main>
         {/* Hero */}
-        <section className="container mx-auto px-4 py-20 lg:py-28">
+        <section className="container mx-auto px-4 pb-6 pt-12 lg:pb-8 lg:pt-16">
           <div className="grid items-center gap-12 lg:grid-cols-2">
             <div>
               <p className="mb-4 text-sm font-medium text-orange-500 dark:text-amber-400">
@@ -37,7 +39,7 @@ export default function HomePage() {
               <div className="flex flex-wrap gap-3">
                 <Button
                   size="lg"
-                  className="bg-amber-400 hover:bg-amber-500 text-stone-800"
+                  className="bg-recipe-primary hover:bg-recipe-primary-hover text-stone-800"
                   asChild
                 >
                   <Link href="/builder">레시피 시작하기</Link>
@@ -51,36 +53,13 @@ export default function HomePage() {
               </p>
             </div>
 
-            {/* Sample prompt card */}
-            <div className="rounded-xl border border-gray-200 bg-gray-50 p-1 shadow-sm dark:border-gray-800 dark:bg-gray-900">
-              <div className="flex items-center gap-1.5 border-b border-gray-200 px-4 py-2.5 dark:border-gray-700">
-                <Terminal className="h-3.5 w-3.5 text-gray-400" />
-                <span className="text-xs text-gray-400">생성된 프롬프트 예시</span>
-              </div>
-              <pre className="overflow-x-auto px-4 py-4 text-xs leading-relaxed text-gray-700 dark:text-gray-300">
-                {`# 쇼핑몰 웹앱 만들기
-
-## 프로젝트 유형
-Next.js + TypeScript 웹앱
-
-## 주요 기능
-- 상품 목록 및 상세 페이지
-- 장바구니 시스템
-- 결제 및 주문 관리
-
-## 참고 서비스
-https://coupang.com
-
-## 요청사항
-모바일 화면 우선으로 디자인해 주세요.
-메인 색상은 파란색 계열로 부탁드려요.`}
-              </pre>
-            </div>
+            {/* Animated terminal */}
+            <TerminalTyping />
           </div>
         </section>
 
         {/* Tools */}
-        <section className="border-t border-amber-100 dark:border-stone-700">
+        <section>
           <div className="container mx-auto px-4 py-16">
             <h2 className="mb-10 text-2xl font-bold text-stone-800 dark:text-stone-100">
               무엇을 도와드릴까요?
@@ -90,26 +69,26 @@ https://coupang.com
                 <Link
                   key={tool.href}
                   href={tool.href}
-                  className="group rounded-lg border border-amber-100 bg-white p-5 transition-all hover:border-amber-300 hover:shadow-sm dark:border-stone-700 dark:bg-stone-800 dark:hover:border-stone-600"
+                  className="group relative h-40 overflow-hidden rounded-3xl border border-stone-200 bg-stone-50 px-6 py-6 transition-all duration-300 hover:border-transparent hover:bg-recipe-primary hover:shadow-lg dark:border-stone-700 dark:bg-stone-800 dark:hover:bg-recipe-primary"
                 >
-                  <tool.icon className="mb-3 h-5 w-5 text-stone-500 dark:text-stone-400" />
-                  <h3 className="mb-1 font-semibold text-stone-800 dark:text-stone-100">
+                  <h3 className="relative z-10 text-xl font-bold text-amber-500 transition-colors duration-300 group-hover:text-stone-800 dark:text-amber-400">
                     {tool.title}
                   </h3>
-                  <p className="text-sm text-stone-500 dark:text-stone-400">
-                    {tool.description}
-                  </p>
-                  <span className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-orange-500 opacity-0 transition-opacity group-hover:opacity-100 dark:text-amber-400">
-                    시작하기 <ArrowRight className="h-3.5 w-3.5" />
-                  </span>
+                  <tool.icon
+                    className="absolute -bottom-8 -right-8 h-36 w-36 text-amber-500/25 transition-colors duration-300 group-hover:text-stone-800/15"
+                    strokeWidth={2}
+                  />
                 </Link>
+              ))}
+              {soonTools.map((tool) => (
+                <ComingSoonCard key={tool.title} title={tool.title} iconName={tool.iconName} />
               ))}
             </div>
           </div>
         </section>
 
         {/* Steps */}
-        <section className="border-t border-amber-100 dark:border-stone-700">
+        <section>
           <div className="container mx-auto px-4 py-16">
             <h2 className="mb-10 text-2xl font-bold text-stone-800 dark:text-stone-100">
               3단계로 앱이 완성돼요
@@ -135,23 +114,29 @@ https://coupang.com
         </section>
       </main>
 
-      <footer className="border-t border-amber-100 dark:border-stone-700">
+      <footer className="border-t border-stone-200 dark:border-stone-700">
         <div className="container mx-auto flex items-center justify-between px-4 py-6">
           <span className="text-sm font-medium text-stone-700 dark:text-stone-300">
             CodeRecipe
           </span>
-          <div className="flex gap-4 text-xs text-stone-400 dark:text-stone-500">
+          <div className="flex flex-wrap gap-4 text-xs text-stone-400 dark:text-stone-500">
             <Link href="/setup" className="hover:text-stone-700 dark:hover:text-stone-300">
               환경 진단
             </Link>
+            <Link href="/guide" className="hover:text-stone-700 dark:hover:text-stone-300">
+              Claude Code 가이드
+            </Link>
             <Link href="/builder" className="hover:text-stone-700 dark:hover:text-stone-300">
-              프롬프트 빌더
+              레시피 만들기
             </Link>
             <Link href="/error-translator" className="hover:text-stone-700 dark:hover:text-stone-300">
               에러 번역기
             </Link>
             <Link href="/glossary" className="hover:text-stone-700 dark:hover:text-stone-300">
               용어 사전
+            </Link>
+            <Link href="/faq" className="hover:text-stone-700 dark:hover:text-stone-300">
+              자주 묻는 질문
             </Link>
           </div>
         </div>
@@ -161,35 +146,45 @@ https://coupang.com
 }
 
 const tools: {
-  href: "/setup" | "/builder" | "/error-translator" | "/glossary";
-  icon: React.ComponentType<{ className?: string }>;
+  href: string;
+  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
   title: string;
-  description: string;
 }[] = [
   {
     href: "/setup",
     icon: Settings2,
     title: "환경 진단",
-    description: "필수 프로그램 설치 여부 확인 + 단계별 설치 가이드",
+  },
+  {
+    href: "/guide",
+    icon: MonitorSmartphone,
+    title: "Claude Code 가이드",
   },
   {
     href: "/builder",
     icon: Wand2,
-    title: "프롬프트 빌더",
-    description: "질문 3개로 Claude Code 프롬프트 자동 생성",
+    title: "레시피 만들기",
   },
   {
     href: "/error-translator",
     icon: AlertCircle,
     title: "에러 번역기",
-    description: "에러 메시지를 한국어로 설명 + 해결 요청문 생성",
   },
   {
     href: "/glossary",
     icon: BookOpen,
     title: "용어 사전",
-    description: "개발 용어를 쉬운 한국어로 설명해 드려요",
   },
+  {
+    href: "/faq",
+    icon: HelpCircle,
+    title: "자주 묻는 질문",
+  },
+];
+
+const soonTools: { title: string; iconName: string }[] = [
+  { title: "내 앱 세상에 공개하기", iconName: "Rocket" },
+  { title: "다음에 뭐 하지?", iconName: "Compass" },
 ];
 
 const steps = [

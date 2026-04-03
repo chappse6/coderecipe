@@ -3,7 +3,7 @@
 import { useState, useMemo } from "react";
 import { GLOSSARY_TERMS, GLOSSARY_TAGS, type GlossaryTerm } from "@coderecipe/shared";
 import { Card, CardContent } from "@/components/ui/card";
-import { Lightbulb } from "lucide-react";
+import { Lightbulb, Copy, Check } from "lucide-react";
 
 function GlossaryCard({ term }: { term: GlossaryTerm }) {
   return (
@@ -24,7 +24,7 @@ function GlossaryCard({ term }: { term: GlossaryTerm }) {
         </div>
         <p className="text-sm text-stone-700 dark:text-stone-300">{term.plain}</p>
         {term.analogy && (
-          <div className="mt-2 flex items-start gap-2 rounded-lg border border-amber-100 bg-amber-50 px-3 py-2 text-sm dark:border-amber-900/40 dark:bg-amber-950/20">
+          <div className="mt-2 flex items-start gap-2 rounded-lg border border-stone-200 bg-stone-50 px-3 py-2 text-sm dark:border-amber-900/40 dark:bg-amber-950/20">
             <Lightbulb className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 text-amber-600 dark:text-amber-400" />
             <p className="text-amber-800 dark:text-amber-300">
               <strong>비유:</strong> {term.analogy}
@@ -33,6 +33,53 @@ function GlossaryCard({ term }: { term: GlossaryTerm }) {
         )}
       </CardContent>
     </Card>
+  );
+}
+
+function NoResultsPrompt({ query }: { query: string }) {
+  const [copied, setCopied] = useState(false);
+  const prompt = `"${query}"이(가) 무슨 뜻인지 쉬운 한국어로 설명해 줘. 비유도 하나 들어줘.`;
+
+  const handleCopy = async () => {
+    await navigator.clipboard.writeText(prompt);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  return (
+    <div className="mx-auto max-w-md py-12 text-center">
+      <p className="text-stone-500 dark:text-stone-400">
+        <strong className="text-stone-700 dark:text-stone-200">&quot;{query}&quot;</strong>에
+        해당하는 용어가 아직 레시피 사전에 없어요.
+      </p>
+      <p className="mt-4 text-sm font-medium text-stone-600 dark:text-stone-300">
+        Claude Code에게 물어보세요:
+      </p>
+      <div className="mt-3 rounded-lg bg-stone-50 px-4 py-3 text-left dark:bg-stone-800">
+        <p className="text-sm leading-relaxed text-stone-600 dark:text-stone-300">
+          {prompt}
+        </p>
+      </div>
+      <button
+        type="button"
+        onClick={handleCopy}
+        className={`mt-3 inline-flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
+          copied
+            ? "bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300"
+            : "bg-recipe-primary text-stone-800 hover:bg-recipe-primary-hover"
+        }`}
+      >
+        {copied ? (
+          <>
+            <Check className="h-3.5 w-3.5" /> 복사됨
+          </>
+        ) : (
+          <>
+            <Copy className="h-3.5 w-3.5" /> 프롬프트 복사하기
+          </>
+        )}
+      </button>
+    </div>
   );
 }
 
@@ -62,7 +109,7 @@ export function Glossary() {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="용어 검색 (예: 터미널, 배포, Git...)"
-          className="w-full rounded-lg border border-stone-200 px-4 py-2.5 text-sm outline-none transition focus:border-amber-400 focus:ring-2 focus:ring-amber-100 dark:border-stone-600 dark:bg-stone-900 dark:text-white dark:focus:ring-amber-900"
+          className="w-full rounded-lg border border-stone-200 px-4 py-2.5 text-sm outline-none transition focus:border-amber-400 focus:ring-2 focus:ring-stone-200 dark:border-stone-600 dark:bg-stone-900 dark:text-white dark:focus:ring-amber-900"
         />
       </div>
 
@@ -75,7 +122,7 @@ export function Glossary() {
             onClick={() => setActiveTag(tag)}
             className={`rounded-md px-3 py-1 text-sm font-medium transition-colors ${
               activeTag === tag
-                ? "bg-amber-400 text-stone-800"
+                ? "bg-recipe-primary text-stone-800"
                 : "bg-stone-100 text-stone-600 hover:bg-stone-200 dark:bg-stone-700 dark:text-stone-300 dark:hover:bg-stone-600"
             }`}
           >
@@ -86,9 +133,7 @@ export function Glossary() {
 
       {/* Results */}
       {filtered.length === 0 ? (
-        <p className="py-12 text-center text-stone-400 dark:text-stone-500">
-          &quot;{query}&quot;에 해당하는 용어가 없어요.
-        </p>
+        <NoResultsPrompt query={query} />
       ) : (
         <div className="grid gap-4 sm:grid-cols-2">
           {filtered.map((term) => (

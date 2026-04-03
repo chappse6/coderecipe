@@ -4,13 +4,15 @@
 This project uses the **Lemon Kitchen** palette. Full spec: `DESIGN.md` (project root).
 
 **Quick rules:**
-- Primary color: `amber-400` (`#FBBF24`) — buttons, CTA, logo accent
+- Primary color: `recipe-primary` (`#FCCA59`) — buttons, CTA, logo accent
+- Card color: `recipe-card` (`#99B7F5`) — main section cards
 - Accent color: `orange-500` (`#F97316`) — links, badges, secondary emphasis
-- Page background: `bg-amber-50 dark:bg-stone-800`
+- Page background: `bg-white dark:bg-stone-800`
 - Card background: `bg-white dark:bg-stone-700`
 - Body text: `text-stone-700 dark:text-stone-100`
-- **NEVER use purple** — all purple classes must be replaced with amber/orange/stone equivalents
+- Borders: `border-stone-200 dark:border-stone-700` — NEVER use `border-amber-100` for structural borders
 - Primary button text must be `text-stone-800` (not white — yellow background needs dark text for contrast)
+- Use `bg-recipe-primary` / `hover:bg-recipe-primary-hover` instead of raw `bg-amber-400` / `bg-amber-500`
 
 ## Skill routing
 

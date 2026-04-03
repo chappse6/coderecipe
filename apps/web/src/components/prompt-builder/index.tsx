@@ -28,7 +28,7 @@ function StepIndicator({ current }: { current: Step }) {
           <div
             className={`flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold transition-colors ${
               i < idx
-                ? "bg-amber-400 text-stone-800"
+                ? "bg-recipe-primary text-stone-800"
                 : i === idx
                   ? "bg-stone-800 text-white ring-2 ring-stone-300 dark:bg-white dark:text-stone-900 dark:ring-stone-600"
                   : "bg-stone-100 text-stone-400 dark:bg-stone-700 dark:text-stone-500"
@@ -79,7 +79,7 @@ function StepType({
             key={option.value}
             type="button"
             onClick={() => onSelect(option.value)}
-            className={`rounded-lg border px-5 py-4 text-left transition-all hover:border-stone-400 hover:shadow-sm ${
+            className={`rounded-lg border px-5 py-4 text-left transition-all hover:border-amber-300 hover:bg-amber-50 hover:shadow-sm dark:hover:border-amber-400/50 dark:hover:bg-stone-700 ${
               selected === option.value
                 ? "border-amber-400 bg-amber-50 dark:border-amber-400 dark:bg-stone-700"
                 : "border-stone-200 bg-white dark:border-stone-600 dark:bg-stone-800"
@@ -104,12 +104,17 @@ function StepFeatures({
   projectType,
   selected,
   onToggle,
+  customFeature,
+  onCustomFeatureChange,
 }: {
   projectType: ProjectType;
   selected: string[];
   onToggle: (value: string) => void;
+  customFeature: string;
+  onCustomFeatureChange: (v: string) => void;
 }) {
   const features = FEATURES_BY_TYPE[projectType];
+  const customChecked = selected.includes("__custom__");
   return (
     <div>
       <h2 className="mb-2 text-xl font-bold text-stone-800 dark:text-white">
@@ -126,7 +131,7 @@ function StepFeatures({
               key={feature.value}
               type="button"
               onClick={() => onToggle(feature.value)}
-              className={`flex items-center gap-3 rounded-lg border px-4 py-3 text-left transition-all hover:border-stone-400 ${
+              className={`flex items-center gap-3 rounded-lg border px-4 py-3 text-left transition-all hover:border-amber-300 hover:bg-amber-50 hover:shadow-sm dark:hover:border-amber-400/50 dark:hover:bg-stone-700 ${
                 checked
                   ? "border-amber-400 bg-amber-50 dark:border-amber-400 dark:bg-stone-700"
                   : "border-stone-200 bg-white dark:border-stone-600 dark:bg-stone-800"
@@ -161,7 +166,54 @@ function StepFeatures({
             </button>
           );
         })}
+        {/* 기타 항목 */}
+        <button
+          type="button"
+          onClick={() => onToggle("__custom__")}
+          className={`flex items-center gap-3 rounded-lg border px-4 py-3 text-left transition-all hover:border-amber-300 hover:bg-amber-50 hover:shadow-sm dark:hover:border-amber-400/50 dark:hover:bg-stone-700 ${
+            customChecked
+              ? "border-amber-400 bg-amber-50 dark:border-amber-400 dark:bg-stone-700"
+              : "border-stone-200 bg-white dark:border-stone-600 dark:bg-stone-800"
+          }`}
+        >
+          <div
+            className={`flex h-4 w-4 flex-shrink-0 items-center justify-center rounded border-2 transition-colors ${
+              customChecked
+                ? "border-stone-800 bg-stone-800 text-white dark:border-white dark:bg-white dark:text-stone-800"
+                : "border-stone-300 bg-white dark:border-stone-600 dark:bg-stone-800"
+            }`}
+          >
+            {customChecked && (
+              <svg
+                className="h-2.5 w-2.5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={3}
+                  d="M5 13l4 4L19 7"
+                />
+              </svg>
+            )}
+          </div>
+          <span className="text-sm font-medium text-stone-800 dark:text-stone-200">
+            기타
+          </span>
+        </button>
       </div>
+      {customChecked && (
+        <input
+          type="text"
+          value={customFeature}
+          onChange={(e) => onCustomFeatureChange(e.target.value)}
+          placeholder="원하는 기능을 적어주세요 (예: 방문자 카운터)"
+          className="mt-3 w-full rounded-lg border border-stone-200 px-4 py-2.5 text-sm outline-none transition focus:border-amber-400 focus:ring-2 focus:ring-stone-200 dark:border-stone-700 dark:bg-stone-900 dark:text-white dark:focus:ring-amber-900"
+          autoFocus
+        />
+      )}
     </div>
   );
 }
@@ -203,7 +255,7 @@ function StepReference({
           className={`w-full rounded-lg border px-4 py-2.5 text-sm outline-none transition focus:ring-2 dark:bg-stone-900 dark:text-white ${
             urlError
               ? "border-red-400 focus:border-red-400 focus:ring-red-100 dark:focus:ring-red-900"
-              : "border-stone-200 focus:border-amber-400 focus:ring-amber-100 dark:border-stone-700 dark:focus:ring-amber-900"
+              : "border-stone-200 focus:border-amber-400 focus:ring-stone-200 dark:border-stone-700 dark:focus:ring-amber-900"
           }`}
         />
         {urlError && (
@@ -222,7 +274,7 @@ function StepReference({
           onChange={(e) => onDescriptionChange(e.target.value)}
           placeholder="예: 메인 색상은 초록색으로, 글씨는 크게 해주세요."
           rows={4}
-          className="w-full rounded-lg border border-stone-200 px-4 py-2.5 text-sm outline-none transition focus:border-amber-400 focus:ring-2 focus:ring-amber-100 dark:border-stone-700 dark:bg-stone-900 dark:text-white dark:focus:ring-amber-900"
+          className="w-full rounded-lg border border-stone-200 px-4 py-2.5 text-sm outline-none transition focus:border-amber-400 focus:ring-2 focus:ring-stone-200 dark:border-stone-700 dark:bg-stone-900 dark:text-white dark:focus:ring-amber-900"
         />
       </div>
     </div>
@@ -285,7 +337,7 @@ function StepResult({
         </pre>
       </div>
 
-      <div className="flex items-start gap-2 rounded-lg border border-amber-100 px-4 py-3 text-sm text-stone-600 dark:border-stone-700 dark:text-stone-400">
+      <div className="flex items-start gap-2 rounded-lg border border-stone-200 px-4 py-3 text-sm text-stone-600 dark:border-stone-700 dark:text-stone-400">
         <Info className="mt-0.5 h-4 w-4 flex-shrink-0 text-stone-400" />
         <p>
           Claude Code를 열고 위 내용을 붙여넣으면 AI가 코드를 만들어 줍니다.
@@ -309,6 +361,7 @@ export function PromptBuilder() {
   const [step, setStep] = useState<Step>("type");
   const [projectType, setProjectType] = useState<ProjectType | null>(null);
   const [features, setFeatures] = useState<string[]>([]);
+  const [customFeature, setCustomFeature] = useState("");
   const [referenceUrl, setReferenceUrl] = useState("");
   const [description, setDescription] = useState("");
   const [generatedPrompt, setGeneratedPrompt] = useState("");
@@ -330,7 +383,8 @@ export function PromptBuilder() {
     if (step === "reference") {
       const input: PromptBuilderInput = {
         projectType: projectType!,
-        features,
+        features: features.filter((f) => f !== "__custom__"),
+        customFeature: customFeature.trim() || undefined,
         referenceUrl: referenceUrl.trim() || undefined,
         description: description.trim() || undefined,
       };
@@ -356,6 +410,7 @@ export function PromptBuilder() {
     setStep("type");
     setProjectType(null);
     setFeatures([]);
+    setCustomFeature("");
     setReferenceUrl("");
     setDescription("");
     setGeneratedPrompt("");
@@ -379,6 +434,8 @@ export function PromptBuilder() {
               projectType={projectType}
               selected={features}
               onToggle={toggleFeature}
+              customFeature={customFeature}
+              onCustomFeatureChange={setCustomFeature}
             />
           )}
           {step === "reference" && (
@@ -409,7 +466,7 @@ export function PromptBuilder() {
               <Button
                 onClick={advance}
                 disabled={!canAdvance()}
-                className="bg-amber-400 text-stone-800 hover:bg-amber-500"
+                className="bg-recipe-primary text-stone-800 hover:bg-recipe-primary-hover"
               >
                 {step === "reference" ? "프롬프트 만들기" : "다음 →"}
               </Button>

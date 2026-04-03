@@ -9,8 +9,9 @@
 
 | 역할 | HEX | Tailwind | 용도 |
 |------|-----|----------|------|
-| Primary | `#FBBF24` | `amber-400` | 버튼, CTA, 로고, 강조 요소 |
-| Primary Hover | `#F59E0B` | `amber-500` | Primary의 hover/active 상태 |
+| Primary | `#FCCA59` | `recipe-primary` | 버튼, CTA, 로고, 강조 요소 |
+| Primary Hover | `#F5BC3B` | `recipe-primary-hover` | Primary의 hover/active 상태 |
+| Card | `#99B7F5` | `recipe-card` | 메인 섹션 카드 배경 |
 | Accent | `#F97316` | `orange-500` | 보조 강조, 배지, 태그, 링크 |
 | Accent Hover | `#EA580C` | `orange-600` | Accent의 hover/active 상태 |
 
@@ -18,8 +19,8 @@
 
 | 역할 | HEX | Tailwind | 용도 |
 |------|-----|----------|------|
-| Light BG | `#FFFBEB` | `amber-50` | 메인 페이지 배경 (라이트 모드) |
-| Surface | `#FEF3C7` | `amber-100` | 카드, 섹션 배경 |
+| Light BG | `#FFFFFF` | `white` | 메인 페이지 배경 (라이트 모드) |
+| Surface | `#F5F5F4` | `stone-100` | 카드, 섹션 배경 |
 | Dark BG | `#292524` | `stone-800` | 다크 모드 배경 |
 | Dark Surface | `#3D3835` | `stone-700` | 다크 모드 카드/섹션 배경 |
 
@@ -69,14 +70,14 @@
 ## Tailwind 클래스 치트시트
 
 ```
-페이지 배경:    bg-amber-50 dark:bg-stone-800
+페이지 배경:    bg-white dark:bg-stone-800
 카드 배경:      bg-white dark:bg-stone-700
 Primary 버튼:   bg-amber-400 hover:bg-amber-500 text-stone-800
 Accent 버튼:    bg-orange-500 hover:bg-orange-600 text-white
 본문 텍스트:    text-stone-700 dark:text-stone-100
 보조 텍스트:    text-stone-500 dark:text-stone-400
 힌트 텍스트:    text-stone-400 dark:text-stone-500
-테두리:         border-amber-100 dark:border-stone-700
+테두리:         border-stone-200 dark:border-stone-700
 링크/강조:      text-orange-500 dark:text-amber-400
 포커스 링:      ring-amber-400
 ```

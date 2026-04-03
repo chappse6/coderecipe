@@ -5,7 +5,7 @@
 @layer base {
   :root {
     /* Lemon Kitchen palette — light mode */
-    --background: 47 100% 97%;      /* #FFFBEB amber-50 */
+    --background: 0 0% 100%;        /* white */
     --foreground: 25 6% 25%;        /* #44403C stone-700 */
     --card: 0 0% 100%;              /* white */
     --card-foreground: 25 6% 25%;   /* stone-700 */
@@ -13,16 +13,16 @@
     --popover-foreground: 25 6% 25%;
     --primary: 45 96% 56%;          /* #FBBF24 amber-400 */
     --primary-foreground: 20 9% 16%; /* #292524 stone-800 */
-    --secondary: 46 97% 88%;        /* #FEF3C7 amber-100 */
+    --secondary: 60 5% 96%;         /* #F5F5F4 stone-100 */
     --secondary-foreground: 25 6% 25%;
-    --muted: 46 97% 88%;            /* amber-100 */
+    --muted: 60 5% 96%;             /* stone-100 */
     --muted-foreground: 24 5% 45%;  /* #78716C stone-500 */
     --accent: 25 95% 53%;           /* #F97316 orange-500 */
     --accent-foreground: 0 0% 100%;
     --destructive: 0 84.2% 60.2%;   /* red-500 */
     --destructive-foreground: 0 0% 100%;
-    --border: 46 97% 88%;           /* #FEF3C7 amber-100 */
-    --input: 46 97% 88%;
+    --border: 20 6% 90%;            /* stone-200 */
+    --input: 20 6% 90%;             /* stone-200 */
     --ring: 45 96% 56%;             /* amber-400 */
     --radius: 0.5rem;
   }

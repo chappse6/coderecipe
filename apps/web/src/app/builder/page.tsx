@@ -12,17 +12,19 @@ export default function BuilderPage() {
     <div className="min-h-screen bg-white dark:bg-stone-950">
       <Nav />
       <div className="container mx-auto px-4 py-12">
-        <div className="mb-10">
-          <h1 className="text-3xl font-bold text-stone-800 dark:text-white sm:text-4xl">
-            레시피 만들기
-          </h1>
-          <p className="mt-2 text-stone-500 dark:text-stone-400">
-            몇 가지 질문에 답하면 바로 사용할 수 있는 Claude Code 레시피가
-            완성됩니다.
-          </p>
-        </div>
+        <div className="mx-auto max-w-2xl">
+          <div className="mb-10">
+            <h1 className="text-3xl font-bold text-stone-800 dark:text-white sm:text-4xl">
+              레시피 만들기
+            </h1>
+            <p className="mt-2 text-stone-500 dark:text-stone-400">
+              몇 가지 질문에 답하면 바로 사용할 수 있는 Claude Code 레시피가
+              완성됩니다.
+            </p>
+          </div>
 
-        <PromptBuilder />
+            <PromptBuilder />
+        </div>
       </div>
     </div>
   );

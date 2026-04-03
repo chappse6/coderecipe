@@ -336,12 +336,13 @@ export interface FeatureOption {
 
 export const FEATURES_BY_TYPE: Record<ProjectType, FeatureOption[]> = {
   website: [
+    { value: "portfolio", label: "작업물/포트폴리오 카드" },
     { value: "contact-form", label: "문의하기 양식" },
+    { value: "sns-links", label: "SNS 링크 (인스타, 링크드인 등)" },
     { value: "gallery", label: "사진/이미지 갤러리" },
     { value: "blog", label: "블로그/소식 게시판" },
-    { value: "map", label: "위치/지도 안내" },
-    { value: "newsletter", label: "이메일 구독 신청" },
-    { value: "multilang", label: "다국어 지원" },
+    { value: "darkmode", label: "다크 모드" },
+    { value: "animation", label: "애니메이션/인터랙션 효과" },
   ],
   "chrome-extension": [
     { value: "popup", label: "버튼 클릭으로 열리는 창" },
@@ -374,6 +375,7 @@ export const FEATURES_BY_TYPE: Record<ProjectType, FeatureOption[]> = {
 export interface PromptBuilderInput {
   projectType: ProjectType;
   features: string[];
+  customFeature?: string;
   referenceUrl?: string;
   description?: string;
 }
@@ -566,10 +568,16 @@ export function buildClaudePrompt(input: PromptBuilderInput): string {
   );
 
   const typeLabel = typeOption?.label ?? input.projectType;
-  const featureList =
-    selectedFeatures.length > 0
-      ? selectedFeatures.map((f) => `- ${f.label}`).join("\n")
-      : "- 기본 기능";
+  const customText = input.customFeature?.trim();
+  const lines = selectedFeatures.map((f) => `- ${f.label}`);
+  if (customText) lines.push(`- ${customText}`);
+  const featureList = lines.length > 0 ? lines.join("\n") : "- 기본 기능";
+
+  // 외부 API가 필요한 기능 목록
+  const externalApiFeatures = ["map", "payment", "newsletter", "order-status"];
+  const needsExternalApi = selectedFeatures.some((f) =>
+    externalApiFeatures.includes(f.value)
+  );
 
   const referenceSection = trimmedReferenceUrl
     ? `\n## 참고 서비스\n${trimmedReferenceUrl}`
@@ -579,7 +587,7 @@ export function buildClaudePrompt(input: PromptBuilderInput): string {
     ? `\n## 추가 요청 사항\n${input.description}`
     : "";
 
-  return `# ${typeLabel} 만들기 요청
+  return `# ${typeLabel} 만들기
 
 ## 프로젝트 유형
 ${typeLabel} (${typeOption?.description ?? ""})
@@ -587,11 +595,23 @@ ${typeLabel} (${typeOption?.description ?? ""})
 ## 필요한 기능
 ${featureList}${referenceSection}${descriptionSection}
 
-## 개발 지침
-- 한국어 사용자를 위한 서비스로, 모든 UI 텍스트는 한국어로 작성해 주세요.
-- 초보자도 바로 실행할 수 있도록 설치 방법과 실행 방법을 README에 포함해 주세요.
-- 가능한 한 단순하고 직관적인 디자인으로 만들어 주세요.
-- 필요한 패키지 설치 명령어를 명확히 안내해 주세요.
+## 작업 방식
+- 핵심 기능부터 먼저 만들고, 나머지는 하나씩 추가해 주세요 (MVP 우선).
+- 한 기능을 완성할 때마다 멈추고 "여기까지 확인해 보세요"라고 알려주세요.
+- 코드를 짤 때 왜 이렇게 만들었는지 간단히 설명해 주세요.
+- 기술 용어가 나오면 반드시 일상적인 비유로 쉽게 풀어서 설명해 주세요. (예: "API는 식당 주문서 같은 거예요")
 
-지금 바로 위 내용으로 ${typeLabel}을 만들어 주세요!`;
+## 개발 지침
+- 모든 UI 텍스트는 한국어로 작성해 주세요.
+- README에 설치 방법과 실행 방법을 포함해 주세요.
+- 가능한 한 단순하고 직관적인 디자인으로 만들어 주세요.
+- 에러가 발생하면 사용자에게 무슨 문제인지 알기 쉽게 보여주세요.
+- 폴더 구조를 깔끔하게 정리하고, 파일마다 역할을 명확히 나눠주세요.${needsExternalApi ? "" : "\n- 외부 API 연동 없이 만들어 주세요. API 키 발급이 필요한 기능은 쓰지 마세요."}
+- 이미지가 필요한 곳은 placeholder 이미지를 사용해 주세요. (예: https://placehold.co)
+
+## 완료 후
+다 만들면 아래 내용을 알려주세요:
+1. 잘 동작하는지 확인하는 방법
+2. 다음에 추가하면 좋을 기능 2~3개 제안
+3. 지금 코드에서 나중에 개선하면 좋을 점`;
 }

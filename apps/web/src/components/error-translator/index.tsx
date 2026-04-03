@@ -55,9 +55,9 @@ export function ErrorTranslator() {
   };
 
   return (
-    <div className="mx-auto max-w-2xl">
+    <div>
       {/* Input Section */}
-      <Card className="mb-6 border border-amber-100 shadow-sm dark:border-stone-700">
+      <Card className="mb-6 border border-stone-200 shadow-sm dark:border-stone-700">
         <CardHeader className="pb-2">
           <CardTitle className="text-base font-semibold text-stone-800 dark:text-stone-100">
             에러 메시지를 붙여넣으세요
@@ -69,7 +69,7 @@ export function ErrorTranslator() {
             onChange={(e) => setErrorInput(e.target.value)}
             placeholder={`예시:\nERROR in ./src/index.js\nSyntaxError: Unexpected token '{'`}
             rows={5}
-            className="w-full resize-none rounded-lg border border-amber-100 px-4 py-3 text-sm font-mono outline-none transition focus:border-amber-400 focus:ring-2 focus:ring-amber-100 dark:border-stone-600 dark:bg-stone-900 dark:text-stone-100 dark:focus:ring-amber-900"
+            className="w-full resize-none rounded-lg border border-stone-200 px-4 py-3 text-sm font-mono outline-none transition focus:border-amber-400 focus:ring-2 focus:ring-stone-200 dark:border-stone-600 dark:bg-stone-900 dark:text-stone-100 dark:focus:ring-amber-900"
           />
 
           <div className="mb-4 mt-3">
@@ -82,7 +82,7 @@ export function ErrorTranslator() {
                   key={ex}
                   type="button"
                   onClick={() => handleExample(ex)}
-                  className="rounded-md border border-amber-100 bg-amber-50 px-3 py-1 text-xs text-stone-600 transition-colors hover:border-amber-200 hover:bg-amber-100 dark:border-stone-600 dark:bg-stone-700 dark:text-stone-400 dark:hover:bg-stone-600"
+                  className="rounded-md border border-stone-200 bg-stone-50 px-3 py-1 text-xs text-stone-600 transition-colors hover:border-stone-300 hover:bg-stone-100 dark:border-stone-600 dark:bg-stone-700 dark:text-stone-400 dark:hover:bg-stone-600"
                 >
                   {ex.length > 40 ? ex.slice(0, 40) + "…" : ex}
                 </button>
@@ -94,7 +94,7 @@ export function ErrorTranslator() {
             <Button
               onClick={handleTranslate}
               disabled={!errorInput.trim()}
-              className="flex-1 gap-2 bg-amber-400 text-stone-800 hover:bg-amber-500"
+              className="flex-1 gap-2 bg-recipe-primary text-stone-800 hover:bg-stone-500"
             >
               <Search className="h-4 w-4" />
               에러 번역하기
@@ -112,7 +112,7 @@ export function ErrorTranslator() {
       {result && (
         <div className="animate-in fade-in space-y-4 duration-300">
           {/* Explanation */}
-          <Card className="border border-amber-100 shadow-sm dark:border-stone-700">
+          <Card className="border border-stone-200 shadow-sm dark:border-stone-700">
             <CardContent className="px-6 py-5">
               <div className="flex items-start gap-3">
                 <AlertCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-red-500 dark:text-red-400" />
@@ -129,7 +129,7 @@ export function ErrorTranslator() {
           </Card>
 
           {/* Suggested Prompt */}
-          <Card className="border border-amber-100 shadow-sm dark:border-stone-700">
+          <Card className="border border-stone-200 shadow-sm dark:border-stone-700">
             <CardContent className="px-6 py-5">
               <div className="mb-3 flex items-center justify-between">
                 <div className="flex items-center gap-2">
@@ -158,7 +158,7 @@ export function ErrorTranslator() {
                   )}
                 </button>
               </div>
-              <div className="rounded-lg border border-amber-100 bg-amber-50 px-4 py-3 dark:border-stone-700 dark:bg-stone-900">
+              <div className="rounded-lg border border-stone-200 bg-stone-50 px-4 py-3 dark:border-stone-700 dark:bg-stone-900">
                 <pre className="whitespace-pre-wrap font-mono text-sm leading-relaxed text-stone-800 dark:text-stone-200">
                   {result.suggestedPrompt}
                 </pre>
@@ -167,7 +167,7 @@ export function ErrorTranslator() {
           </Card>
 
           {/* Hint */}
-          <div className="flex items-start gap-2 rounded-lg border border-amber-100 px-4 py-3 text-sm text-stone-600 dark:border-stone-700 dark:text-stone-400">
+          <div className="flex items-start gap-2 rounded-lg border border-stone-200 px-4 py-3 text-sm text-stone-600 dark:border-stone-700 dark:text-stone-400">
             <Info className="mt-0.5 h-4 w-4 flex-shrink-0 text-stone-400" />
             <p>
               위 내용을 복사해서 Claude Code 채팅창에 붙여넣으면 AI가 해결
@@ -179,7 +179,7 @@ export function ErrorTranslator() {
 
       {/* Common Patterns Reference */}
       {!result && (
-        <Card className="border border-amber-100 shadow-sm dark:border-stone-700">
+        <Card className="border border-stone-200 shadow-sm dark:border-stone-700">
           <CardHeader className="pb-2">
             <CardTitle className="flex items-center gap-2 text-sm font-semibold text-stone-700 dark:text-stone-300">
               <List className="h-4 w-4" />
@@ -191,7 +191,7 @@ export function ErrorTranslator() {
               {ERROR_PATTERNS.map((p) => (
                 <div
                   key={p.id}
-                  className="flex items-start gap-3 rounded-lg border border-amber-100 px-4 py-2.5 dark:border-stone-700"
+                  className="flex items-start gap-3 rounded-lg border border-stone-200 px-4 py-2.5 dark:border-stone-700"
                 >
                   <AlertCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-stone-400" />
                   <div>
