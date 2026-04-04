@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { translateError, ERROR_PATTERNS } from "@coderecipe/shared";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -23,35 +23,46 @@ const COMMON_EXAMPLES = [
 ];
 
 export function ErrorTranslator() {
+  const resultRef = useRef<HTMLDivElement>(null);
   const [errorInput, setErrorInput] = useState("");
+  const [context, setContext] = useState("");
   const [result, setResult] = useState<ReturnType<typeof translateError> | null>(
     null
   );
   const [copied, setCopied] = useState(false);
+  const [hasCopied, setHasCopied] = useState(false);
 
   const handleTranslate = () => {
     if (!errorInput.trim()) return;
-    setResult(translateError(errorInput));
+    setResult(translateError(errorInput, context));
     setCopied(false);
+    setHasCopied(false);
+    setTimeout(() => {
+      resultRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 50);
   };
 
   const handleCopy = async () => {
     if (!result) return;
     await navigator.clipboard.writeText(result.suggestedPrompt);
     setCopied(true);
+    setHasCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
   const handleExample = (example: string) => {
     setErrorInput(example);
-    setResult(translateError(example));
+    setResult(translateError(example, context));
     setCopied(false);
+    setHasCopied(false);
   };
 
   const handleReset = () => {
     setErrorInput("");
+    setContext("");
     setResult(null);
     setCopied(false);
+    setHasCopied(false);
   };
 
   return (
@@ -73,6 +84,25 @@ export function ErrorTranslator() {
           />
 
           <div className="mb-4 mt-3">
+            <label className="mb-1.5 flex items-center gap-1.5 text-sm font-medium text-stone-700 dark:text-stone-300">
+              어떤 작업을 하다가 이 에러가 났나요?
+              <span className="rounded bg-stone-100 px-1.5 py-0.5 text-[10px] font-normal text-stone-400 dark:bg-stone-700 dark:text-stone-500">
+                선택사항
+              </span>
+            </label>
+            <input
+              type="text"
+              value={context}
+              onChange={(e) => setContext(e.target.value)}
+              placeholder="예: npm install 실행 중 / Next.js 빌드할 때 / 로그인 버튼 클릭 시"
+              className="mb-1.5 w-full rounded-lg border border-stone-200 px-4 py-2.5 text-sm outline-none transition focus:border-amber-400 focus:ring-2 focus:ring-stone-200 dark:border-stone-600 dark:bg-stone-900 dark:text-stone-100 dark:focus:ring-amber-900"
+            />
+            <p className="text-xs text-stone-400 dark:text-stone-500">
+              상황을 적으면 Claude Code가 더 정확한 해결 방법을 알려줘요
+            </p>
+          </div>
+
+          <div className="mb-4 border-t border-stone-100 pt-4 dark:border-stone-700">
             <p className="mb-2 text-xs text-stone-400 dark:text-stone-500">
               자주 나오는 에러 예시:
             </p>
@@ -94,7 +124,7 @@ export function ErrorTranslator() {
             <Button
               onClick={handleTranslate}
               disabled={!errorInput.trim()}
-              className="flex-1 gap-2 bg-recipe-primary text-stone-800 hover:bg-stone-500"
+              className="flex-1 gap-2 bg-recipe-primary text-stone-800 shadow-sm hover:bg-recipe-primary-hover"
             >
               <Search className="h-4 w-4" />
               에러 번역하기
@@ -110,7 +140,7 @@ export function ErrorTranslator() {
 
       {/* Result Section */}
       {result && (
-        <div className="animate-in fade-in space-y-4 duration-300">
+        <div ref={resultRef} className="animate-in fade-in space-y-4 duration-300">
           {/* Explanation */}
           <Card className="border border-stone-200 shadow-sm dark:border-stone-700">
             <CardContent className="px-6 py-5">
@@ -144,7 +174,7 @@ export function ErrorTranslator() {
                   className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${
                     copied
                       ? "bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300"
-                      : "bg-stone-100 text-stone-600 hover:bg-stone-200 dark:bg-stone-700 dark:text-stone-300 dark:hover:bg-stone-600"
+                      : `bg-recipe-primary text-stone-800 hover:bg-recipe-primary-hover${hasCopied ? "" : " animate-pulse-subtle"}`
                   }`}
                 >
                   {copied ? (

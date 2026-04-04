@@ -244,7 +244,7 @@ export function ClaudeGuide() {
               onClick={() => setActiveId(section.id)}
               className={`w-full rounded-lg px-3 py-2.5 text-left text-sm font-medium transition-colors ${
                 activeId === section.id
-                  ? "bg-amber-50 text-stone-800 dark:bg-stone-700 dark:text-white"
+                  ? "border-l-[3px] border-amber-500 bg-amber-50 pl-[9px] text-stone-800 dark:border-amber-400 dark:bg-stone-700 dark:text-white"
                   : "text-stone-500 hover:bg-stone-50 hover:text-stone-700 dark:text-stone-400 dark:hover:bg-stone-800 dark:hover:text-stone-200"
               }`}
             >

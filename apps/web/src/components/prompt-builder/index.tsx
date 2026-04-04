@@ -58,12 +58,23 @@ function StepIndicator({ current }: { current: Step }) {
 
 // ── Step 1: Project Type ──────────────────────────────────────────────────────
 
+const TOPIC_PLACEHOLDER_BY_TYPE: Record<ProjectType, string> = {
+  website: "예: 동네 카페 소개, 프리랜서 포트폴리오, 강아지 입양 안내",
+  "chrome-extension": "예: 유튜브 영상 메모, 쇼핑 가격 비교, 뉴스 요약",
+  chatbot: "예: 카페 주문 안내, 영어 회화 연습, 운동 루틴 추천",
+  webapp: "예: 독서 기록 관리, 팀 일정 관리, 동네 중고거래",
+};
+
 function StepType({
   selected,
   onSelect,
+  topic,
+  onTopicChange,
 }: {
   selected: ProjectType | null;
   onSelect: (t: ProjectType) => void;
+  topic: string;
+  onTopicChange: (v: string) => void;
 }) {
   return (
     <div>
@@ -94,6 +105,25 @@ function StepType({
           </button>
         ))}
       </div>
+      {selected && (
+        <div className="mt-6">
+          <label className="mb-1.5 block text-sm font-medium text-stone-700 dark:text-stone-300">
+            어떤 주제의 {PROJECT_TYPE_OPTIONS.find(o => o.value === selected)?.label}인가요?
+            <span className="ml-1 text-orange-500">*</span>
+          </label>
+          <input
+            type="text"
+            value={topic}
+            onChange={(e) => onTopicChange(e.target.value)}
+            placeholder={TOPIC_PLACEHOLDER_BY_TYPE[selected]}
+            className="w-full rounded-lg border border-stone-200 px-4 py-2.5 text-sm outline-none transition focus:border-amber-400 focus:ring-2 focus:ring-stone-200 dark:border-stone-700 dark:bg-stone-900 dark:text-white dark:focus:ring-amber-900"
+            autoFocus
+          />
+          <p className="mt-1.5 text-xs text-stone-400 dark:text-stone-500">
+            구체적으로 적을수록 더 좋은 결과를 얻을 수 있어요.
+          </p>
+        </div>
+      )}
     </div>
   );
 }
@@ -360,6 +390,7 @@ function StepResult({
 export function PromptBuilder() {
   const [step, setStep] = useState<Step>("type");
   const [projectType, setProjectType] = useState<ProjectType | null>(null);
+  const [topic, setTopic] = useState("");
   const [features, setFeatures] = useState<string[]>([]);
   const [customFeature, setCustomFeature] = useState("");
   const [referenceUrl, setReferenceUrl] = useState("");
@@ -374,7 +405,7 @@ export function PromptBuilder() {
   };
 
   const canAdvance = () => {
-    if (step === "type") return projectType !== null;
+    if (step === "type") return projectType !== null && topic.trim().length > 0;
     return true;
   };
 
@@ -383,6 +414,7 @@ export function PromptBuilder() {
     if (step === "reference") {
       const input: PromptBuilderInput = {
         projectType: projectType!,
+        topic: topic.trim(),
         features: features.filter((f) => f !== "__custom__"),
         customFeature: customFeature.trim() || undefined,
         referenceUrl: referenceUrl.trim() || undefined,
@@ -409,6 +441,7 @@ export function PromptBuilder() {
   const restart = () => {
     setStep("type");
     setProjectType(null);
+    setTopic("");
     setFeatures([]);
     setCustomFeature("");
     setReferenceUrl("");
@@ -427,7 +460,7 @@ export function PromptBuilder() {
         </CardHeader>
         <CardContent className="px-6 pb-8 pt-2">
           {step === "type" && (
-            <StepType selected={projectType} onSelect={setProjectType} />
+            <StepType selected={projectType} onSelect={setProjectType} topic={topic} onTopicChange={setTopic} />
           )}
           {step === "features" && projectType && (
             <StepFeatures
@@ -466,7 +499,7 @@ export function PromptBuilder() {
               <Button
                 onClick={advance}
                 disabled={!canAdvance()}
-                className="bg-recipe-primary text-stone-800 hover:bg-recipe-primary-hover"
+                className="bg-recipe-primary text-stone-800 shadow-sm hover:bg-recipe-primary-hover disabled:bg-stone-200 disabled:text-stone-400 disabled:shadow-none"
               >
                 {step === "reference" ? "프롬프트 만들기" : "다음 →"}
               </Button>

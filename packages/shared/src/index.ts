@@ -374,6 +374,7 @@ export const FEATURES_BY_TYPE: Record<ProjectType, FeatureOption[]> = {
 
 export interface PromptBuilderInput {
   projectType: ProjectType;
+  topic: string;              // 필수: 어떤 주제/내용의 사이트인지 (예: "카페 소개", "개인 포트폴리오")
   features: string[];
   customFeature?: string;
   referenceUrl?: string;
@@ -520,8 +521,11 @@ export const ERROR_PATTERNS: ErrorPattern[] = [
   },
 ];
 
-export function translateError(errorMessage: string): TranslateErrorResult {
+export function translateError(errorMessage: string, context?: string): TranslateErrorResult {
   const trimmed = errorMessage.trim();
+  const contextSuffix = context?.trim()
+    ? `\n\n상황 설명:\n${context.trim()}`
+    : "";
 
   for (const pattern of ERROR_PATTERNS) {
     if (pattern.pattern.test(trimmed)) {
@@ -530,7 +534,7 @@ export function translateError(errorMessage: string): TranslateErrorResult {
         errorId: pattern.id,
         title: pattern.title,
         explanation: pattern.explanation,
-        suggestedPrompt: `${pattern.suggestedPrompt}\n\n에러 내용:\n${trimmed}`,
+        suggestedPrompt: `${pattern.suggestedPrompt}\n\n에러 내용:\n${trimmed}${contextSuffix}`,
       };
     }
   }
@@ -540,9 +544,224 @@ export function translateError(errorMessage: string): TranslateErrorResult {
     matched: false,
     title: "알 수 없는 오류",
     explanation: "이 오류의 정확한 유형은 파악하기 어렵지만, Claude Code에게 전달하면 분석해줄 수 있어요.",
-    suggestedPrompt: `다음 오류가 발생했어요. 원인을 분석하고 해결 방법을 알려주세요:\n\n${trimmed}`,
+    suggestedPrompt: `다음 오류가 발생했어요. 원인을 분석하고 해결 방법을 알려주세요:\n\n${trimmed}${contextSuffix}`,
   };
 }
+
+// ── Type-specific prompt sections ─────────────────────────────────────────────
+
+const PERSONA_BY_TYPE: Record<ProjectType, string> = {
+  website: `당신은 10년 경력의 웹 디자이너 겸 프론트엔드 개발자입니다. 깔끔하고 세련된 사이트를 한 번에 완성하는 것이 당신의 특기입니다. 템플릿 느낌이 아닌, 해당 주제에 딱 맞는 맞춤형 사이트를 만들어 주세요.`,
+
+  "chrome-extension": `당신은 크롬 확장 프로그램 전문 개발자입니다. 사용자가 매일 쓰게 되는 실용적인 도구를 만드는 것이 당신의 특기입니다. 가볍고 빠르게 동작하면서도, 쓸 때 "이거 잘 만들었다"라는 느낌이 드는 확장 프로그램을 만들어 주세요.`,
+
+  chatbot: `당신은 대화형 서비스 전문 개발자입니다. 사용자가 실제 사람과 대화하는 것 같은 자연스러운 챗봇을 만드는 것이 당신의 특기입니다. 딱딱한 기계 응답이 아닌, 맥락을 이해하고 적절하게 반응하는 챗봇을 만들어 주세요.`,
+
+  webapp: `당신은 풀스택 웹 애플리케이션 개발자입니다. 실제로 사람들이 매일 쓸 수 있는 수준의 완성도 높은 웹앱을 만드는 것이 당신의 특기입니다. SaaS 제품처럼 깔끔한 UX와 안정적인 동작을 갖춘 웹앱을 만들어 주세요.`,
+};
+
+const TECH_STACK_BY_TYPE: Record<ProjectType, string> = {
+  website: `## 기술 스택
+- HTML5 + CSS3 + 바닐라 JavaScript (프레임워크 없이)
+- CSS는 커스텀 프로퍼티(변수)를 활용해서 색상과 간격을 체계적으로 관리해 주세요
+- 필요한 경우에만 가벼운 CSS 라이브러리(예: normalize.css) 사용 가능
+- 별도의 빌드 도구 없이 브라우저에서 바로 열 수 있게 만들어 주세요`,
+
+  "chrome-extension": `## 기술 스택
+- Manifest V3 기반
+- 팝업/옵션 UI: HTML + CSS + 바닐라 JavaScript
+- 데이터 저장: chrome.storage.local
+- 필요한 경우 content script와 background service worker 활용
+- 외부 프레임워크 없이 가볍게 만들어 주세요`,
+
+  chatbot: `## 기술 스택
+- HTML + CSS + 바닐라 JavaScript (단일 페이지)
+- 대화 데이터: JSON 파일로 관리
+- 메시지 매칭: 키워드 기반 + 유사도 매칭
+- 외부 API나 서버 없이 클라이언트만으로 동작하게 만들어 주세요`,
+
+  webapp: `## 기술 스택
+- HTML + CSS + 바닐라 JavaScript (또는 간단한 모듈 구조)
+- 데이터 저장: localStorage + JSON 구조
+- 라우팅: hash 기반 SPA 라우팅 또는 멀티페이지
+- 별도의 빌드 도구나 프레임워크 없이 바로 실행 가능하게 만들어 주세요`,
+};
+
+const DESIGN_GUIDANCE_BY_TYPE: Record<ProjectType, string> = {
+  website: `## 디자인 원칙
+- 콘텐츠 중심 레이아웃: 텍스트와 이미지 사이 여백을 넉넉하게, 줄 간격(line-height)은 1.6~1.8로 읽기 편하게
+- 첫 화면(히어로 섹션): 이 사이트가 무엇인지 한 문장으로 전달. 배경 이미지보다 타이포그래피와 여백으로 임팩트를 주세요
+- 색상: 주색 1개 + 보조색 1개 + 배경/텍스트 계열. 채도가 너무 높은 색은 피하고, 차분하면서도 개성 있는 팔레트를 선택하세요
+- 레이아웃: 모든 섹션이 같은 구조(카드 3개 나열 등)로 반복되지 않게 해주세요. 전체 너비 섹션, 텍스트+이미지 교차 배치, 강조 인용구 등 변화를 주세요
+- 타이포그래피: 제목과 본문의 크기 대비를 확실하게 (제목 2rem 이상, 본문 1rem). 자간과 행간을 세심하게 조절하세요
+- 반응형: 모바일(375px) 먼저, 태블릿(768px), 데스크톱(1200px) 순서로 대응
+- 마이크로 인터랙션: 호버 시 미세한 색상 변화, 스크롤 시 자연스러운 fade-in 정도만. 과한 애니메이션은 금지`,
+
+  "chrome-extension": `## 디자인 원칙
+- 팝업 사이즈: 가로 360px, 세로 최대 500px. 이 안에서 핵심 기능이 한눈에 보여야 합니다
+- 조작 효율: 사용자가 클릭 1~2번으로 원하는 결과를 얻을 수 있게 해주세요
+- 브라우저 조화: 크롬 기본 UI와 이질감 없는 깔끔한 디자인. 둥근 모서리(8px), 부드러운 그림자
+- 상태 표시: 로딩(스피너), 성공(체크), 실패(에러 메시지)를 시각적으로 명확히 구분
+- 아이콘: 16x16, 32x32, 48x48, 128x128 사이즈 모두 준비. SVG 기반으로 선명하게
+- 색상: 시스템 UI와 어울리는 중립적 색상 + 주요 액션에만 포인트 색 하나`,
+
+  chatbot: `## 대화 설계 원칙
+- 첫 인사: 자연스럽고 친근하게. "안녕하세요! 무엇을 도와드릴까요?" 수준이 아니라, 이 챗봇만의 캐릭터가 느껴지는 인사를 만들어 주세요
+- 추천 질문: 사용자가 뭘 입력해야 할지 모를 때를 대비한 버튼형 추천 질문 3~4개
+- 답변 길이: 한 번에 2~3문장. 길어지면 단계별로 나눠서 보내주세요
+- 솔직한 응답: "그 부분은 잘 모르겠어요. 이런 건 어떠세요?" 같은 자연스러운 모름 표현
+- 대화 흐름: 항상 다음 행동을 유도하되, 강요가 아닌 제안 형태로
+- 감정 인식: 감사, 불만 등 감정적 표현에 적절히 반응하는 응답 포함
+- UI: 카카오톡/메신저 스타일의 말풍선 UI. 타이핑 애니메이션으로 실제 대화 느낌`,
+
+  webapp: `## 디자인 원칙
+- 핵심 유저 플로우를 먼저 설계하고, 그 흐름이 3단계 이내에 완료되게 해주세요
+- Empty State: 데이터가 없을 때 일러스트나 안내 문구로 다음 행동을 유도 (빈 화면 방치 금지)
+- 폼: 실시간 유효성 검사, 에러 메시지는 입력 필드 바로 아래에, 성공 시 미세한 초록색 피드백
+- 상태 피드백: 로딩(스켈레톤 UI 또는 스피너), 성공(토스트 메시지), 실패(인라인 에러) 명확히 구분
+- 일관성: 버튼, 카드, 입력 필드 등 반복 요소는 동일한 스타일. CSS 변수로 디자인 토큰 관리
+- 네비게이션: 현재 위치를 항상 알 수 있게 (활성 메뉴 하이라이트, 브레드크럼 등)
+- 레이아웃: 사이드바+메인 또는 탑바+콘텐츠 구조. 반응형으로 모바일에서는 자연스럽게 접히게`,
+};
+
+const WORK_STYLE_BY_TYPE: Record<ProjectType, string> = {
+  website: `## 작업 방식
+1. 전체 페이지 구조(헤더, 히어로, 본문 섹션들, 푸터)를 HTML로 먼저 잡기
+2. CSS로 레이아웃과 타이포그래피 완성 (모바일 먼저)
+3. 각 섹션의 콘텐츠를 주제에 맞는 실제 내용으로 채우기
+4. 인터랙션과 반응형 마무리
+- 한 섹션 완성할 때마다 "여기까지 확인해 보세요"라고 알려주세요
+- HTML 시맨틱 태그 필수 (header, main, section, article, footer)`,
+
+  "chrome-extension": `## 작업 방식
+1. manifest.json(V3) 설정 — 필요한 권한만 최소로
+2. 팝업 UI 완성 — 핵심 화면과 인터랙션
+3. 백그라운드/콘텐츠 스크립트 — 실제 기능 로직
+4. chrome.storage로 데이터 저장 — 사용자 설정 유지
+- 한 기능 완성할 때마다 "크롬에서 확장 프로그램 로드해서 확인해 보세요"라고 알려주세요
+- 에러 발생 시 크롬 개발자도구 어디서 확인하는지도 안내해 주세요`,
+
+  chatbot: `## 작업 방식
+1. 대화 시나리오 설계 — 인사 → 의도 파악 → 응답 → 후속 안내 흐름
+2. 핵심 대화 5개를 먼저 완성하고 테스트
+3. 예외 처리 — 인식 못하는 입력, 다시 물어보기, 기본 응답
+4. UI 마무리 — 말풍선, 타이핑 효과, 추천 질문 버튼
+- 한 시나리오 완성할 때마다 "여기까지 확인해 보세요"라고 알려주세요
+- 대화 데이터는 별도 JSON 파일로 분리해서 비개발자도 수정 가능하게`,
+
+  webapp: `## 작업 방식
+1. 데이터 모델 설계 — 어떤 정보를 어떤 구조로 저장할지 먼저 정하기
+2. 핵심 CRUD — 만들기, 읽기, 수정, 삭제 기본 기능 완성
+3. UI/UX 다듬기 — 빈 상태, 로딩, 에러 처리, 폼 유효성 검사
+4. 부가 기능 하나씩 추가
+- 한 기능 완성할 때마다 "여기까지 확인해 보세요"라고 알려주세요
+- 페이지 이동은 사용자 행동 흐름에 맞게 자연스럽게`,
+};
+
+const DEV_GUIDELINES_BY_TYPE: Record<ProjectType, string> = {
+  website: `## 개발 지침
+- 모든 텍스트는 한국어로, 주제에 맞는 실제 내용으로 채워주세요. "Lorem ipsum"이나 "여기에 내용을 입력하세요" 같은 임시 텍스트는 절대 쓰지 마세요
+- SEO: title, meta description, og 태그 설정
+- 이미지: alt 텍스트 필수. 실제 이미지가 필요한 곳은 picsum.photos나 unsplash.com의 소스 URL을 사용해 주세요
+- 인터랙션: 클릭 가능한 요소에 hover 효과, 포커스 스타일 적용
+- favicon 설정
+- README에 로컬 실행 방법 포함`,
+
+  "chrome-extension": `## 개발 지침
+- Manifest V3 규격 필수
+- 모든 UI 텍스트는 한국어
+- 권한(permissions)은 꼭 필요한 것만 최소로
+- chrome.storage.local로 데이터 저장
+- 콘텐츠 스크립트가 기존 웹사이트 스타일/기능을 깨뜨리지 않도록 주의 (CSS 네임스페이스 격리)
+- README에 설치 방법(개발자 모드 → 압축해제 로드) 포함`,
+
+  chatbot: `## 개발 지침
+- 모든 응답은 한국어, 존댓말로. 딱딱한 안내문이 아니라 실제 사람이 말하는 것처럼 자연스러운 어조로 작성해 주세요
+- 대화 데이터는 JSON 파일로 분리해서 코드 수정 없이 시나리오를 바꿀 수 있게
+- 인식 못하는 입력에 대한 기본 응답 반드시 포함 (다양한 변형 3개 이상)
+- 대화 UI: 카카오톡 스타일 말풍선, 시간 표시, 프로필 아이콘
+- README에 실행 방법과 대화 시나리오 수정 가이드 포함`,
+
+  webapp: `## 개발 지침
+- 모든 UI 텍스트는 한국어. 버튼, 메시지, 안내문 모두 자연스러운 한국어로
+- 폼: 프론트엔드 유효성 검사 + 친절한 에러 메시지 ("이메일 형식이 올바르지 않습니다" 식으로)
+- 데이터: localStorage + JSON 구조. DB 없이 동작
+- 라우팅: URL만 보고 어떤 페이지인지 알 수 있게
+- 폴더 구조: 역할별로 명확하게 분리 (pages/, components/, data/, utils/)
+- README에 설치, 실행, 주요 기능 설명 포함`,
+};
+
+const QUALITY_RULES_BY_TYPE: Record<ProjectType, string> = {
+  website: `## 퀄리티 기준 (중요)
+이것은 템플릿이 아닌, "${"{topic}"}"만을 위해 만든 맞춤 사이트여야 합니다:
+- 콘텐츠: 주제에 맞는 구체적이고 현실적인 한국어 텍스트를 직접 작성해 주세요. 실제 운영하는 사이트처럼 보여야 합니다
+- 색상: 주제의 분위기에 어울리는 고유한 색상 팔레트를 선택하세요 (카페라면 따뜻한 브라운 계열, 기술 블로그라면 차분한 블루 계열 등)
+- 레이아웃 변화: 섹션마다 구조를 다르게. 한 섹션은 좌우 배치, 다른 섹션은 전체 너비, 또 다른 섹션은 카드 그리드 — 단조로운 반복 금지
+- 디테일: 섹션 간 부드러운 전환, 일관된 간격 시스템(8px 또는 4px 단위), 의도적인 여백 활용
+- 사진: 주제에 맞는 실제 사진을 unsplash 소스 URL로 넣어주세요 (placehold.co는 최후의 수단)`,
+
+  "chrome-extension": `## 퀄리티 기준 (중요)
+실제 크롬 웹스토어에 올라와 있는 인기 확장 프로그램 수준이어야 합니다:
+- 첫인상: 설치 직후 바로 쓸 수 있어야 합니다. 복잡한 설정 단계 없이 핵심 기능이 즉시 동작
+- 피드백: 모든 사용자 액션에 시각적 반응이 있어야 합니다 (클릭 → 로딩 → 완료)
+- 에러 대응: "문제가 발생했습니다" 같은 모호한 메시지 대신, 구체적인 원인과 해결 방법 안내
+- 데이터: 사용자 설정과 데이터가 브라우저를 닫았다 열어도 유지
+- 디자인: 기본 HTML 느낌이 아닌, 다듬어진 UI. 적절한 패딩, 정렬, 색상 대비`,
+
+  chatbot: `## 퀄리티 기준 (중요)
+기계가 답변하는 느낌이 아니라, 해당 분야에 능숙한 실제 상담원과 대화하는 느낌이어야 합니다:
+- 자연스러움: "~에 대해 안내해 드리겠습니다" 같은 기계적 표현 대신, "아, 그 부분이 궁금하시군요!" 같은 자연스러운 표현
+- 맥락 유지: 이전 대화 내용을 기억하고 참조할 수 있어야 합니다 (같은 세션 내)
+- 다양한 응답: 같은 질문에도 2~3가지 다른 표현으로 답변해서 반복감 줄이기
+- 실제 데이터: 주제에 맞는 현실적인 답변 내용. 카페봇이라면 실제 메뉴명과 가격, 운영시간 등
+- UI 완성도: 메시지 입력 시 부드러운 스크롤, 타이핑 애니메이션, 시간 표시`,
+
+  webapp: `## 퀄리티 기준 (중요)
+실제 서비스 중인 웹앱처럼 보이고 동작해야 합니다:
+- 샘플 데이터: 빈 앱이 아닌, 주제에 맞는 현실적인 샘플 데이터 5~10개가 미리 들어있어야 합니다
+- 상태 관리: 새로고침해도 데이터가 유지되어야 합니다 (localStorage)
+- 에러 방지: 잘못된 입력, 빈 제출 등 사용자 실수를 미리 방어
+- 비어있을 때: "아직 데이터가 없습니다" 화면이 아닌, 첫 데이터를 만들도록 자연스럽게 유도하는 안내
+- 반응형: 모바일에서도 핵심 기능을 불편 없이 사용 가능`,
+};
+
+const ANTI_SLOP_RULES = `## 절대 하지 말 것
+- "Lorem ipsum" 또는 아무 의미 없는 임시 텍스트 사용 금지
+- 모든 섹션이 똑같은 3열 카드 레이아웃으로 반복되는 것 금지
+- 무지개색 그라디언트, 과도한 그림자, 네온 컬러 사용 금지
+- "환영합니다!", "최고의 서비스", "혁신적인 솔루션" 같은 의미 없는 마케팅 문구 금지
+- 의미 없는 아이콘 남발 금지
+- 과도한 애니메이션이나 화려한 효과 금지. 목적이 있는 인터랙션만 사용하세요`;
+
+const COMPLETION_BY_TYPE: Record<ProjectType, string> = {
+  website: `## 완료 후
+모두 완성되면 아래 내용을 정리해서 알려주세요:
+1. 브라우저에서 열어 확인하는 방법
+2. 모바일 확인 방법 (크롬 개발자도구 → 반응형 모드)
+3. 텍스트나 이미지를 바꾸고 싶을 때 수정할 파일과 위치
+4. 다음 단계로 추가하면 좋을 기능 2~3개 제안`,
+
+  "chrome-extension": `## 완료 후
+모두 완성되면 아래 내용을 정리해서 알려주세요:
+1. 크롬에 설치하는 방법 (단계별)
+2. 주요 기능 사용법
+3. 기능 수정 시 어떤 파일을 보면 되는지
+4. 크롬 웹스토어 등록을 위해 추가로 필요한 것`,
+
+  chatbot: `## 완료 후
+모두 완성되면 아래 내용을 정리해서 알려주세요:
+1. 챗봇 실행 및 테스트 방법
+2. 대화 시나리오 추가/수정 방법 (JSON 파일 구조 설명)
+3. 실제 메신저 연결 방법 간단 안내
+4. 다음 단계로 추가하면 좋을 기능 2~3개 제안`,
+
+  webapp: `## 완료 후
+모두 완성되면 아래 내용을 정리해서 알려주세요:
+1. 로컬 실행 및 확인 방법
+2. 주요 기능별 사용 가이드
+3. 데이터 구조 변경 시 수정할 파일과 방법
+4. 다음 단계로 추가하면 좋을 기능 2~3개 제안`,
+};
 
 export function buildClaudePrompt(input: PromptBuilderInput): string {
   const typeOption = PROJECT_TYPE_OPTIONS.find(
@@ -551,6 +770,10 @@ export function buildClaudePrompt(input: PromptBuilderInput): string {
   const featureOptions = FEATURES_BY_TYPE[input.projectType];
   if (!featureOptions) {
     throw new Error(`유효하지 않은 프로젝트 유형입니다: ${input.projectType}`);
+  }
+  const trimmedTopic = input.topic?.trim();
+  if (!trimmedTopic) {
+    throw new Error("주제를 입력해 주세요. (예: 카페 소개, 개인 포트폴리오)");
   }
   const trimmedReferenceUrl = input.referenceUrl?.trim() || undefined;
   if (trimmedReferenceUrl) {
@@ -580,38 +803,51 @@ export function buildClaudePrompt(input: PromptBuilderInput): string {
   );
 
   const referenceSection = trimmedReferenceUrl
-    ? `\n## 참고 서비스\n${trimmedReferenceUrl}`
+    ? `\n## 참고 서비스\n${trimmedReferenceUrl}\n이 서비스의 구조, 정보 배치, 사용자 흐름을 참고하되, 디자인은 "${trimmedTopic}"에 맞게 새로 만들어 주세요. 그대로 복사하지 마세요.`
     : "";
 
   const descriptionSection = input.description
     ? `\n## 추가 요청 사항\n${input.description}`
     : "";
 
-  return `# ${typeLabel} 만들기
+  const noExternalApiLine = needsExternalApi
+    ? ""
+    : "\n- 외부 API 연동 없이 만들어 주세요. API 키 발급이 필요한 기능은 쓰지 마세요.";
 
-## 프로젝트 유형
-${typeLabel} (${typeOption?.description ?? ""})
+  const persona = PERSONA_BY_TYPE[input.projectType];
+  const techStack = TECH_STACK_BY_TYPE[input.projectType];
+  const designGuidance = DESIGN_GUIDANCE_BY_TYPE[input.projectType];
+  const workStyle = WORK_STYLE_BY_TYPE[input.projectType];
+  const devGuidelines = DEV_GUIDELINES_BY_TYPE[input.projectType];
+  const qualityRules = QUALITY_RULES_BY_TYPE[input.projectType].replace(
+    "{topic}",
+    trimmedTopic
+  );
+  const completion = COMPLETION_BY_TYPE[input.projectType];
+
+  return `# "${trimmedTopic}" ${typeLabel} 만들기
+
+${persona}
+
+## 프로젝트 개요
+"${trimmedTopic}" 주제로 ${typeLabel}을(를) 처음부터 끝까지 완성해 주세요.
+복사해서 바로 쓸 수 있는 수준으로, 빈칸이나 미완성 부분 없이 모든 콘텐츠가 채워진 상태여야 합니다.
 
 ## 필요한 기능
 ${featureList}${referenceSection}${descriptionSection}
 
-## 작업 방식
-- 핵심 기능부터 먼저 만들고, 나머지는 하나씩 추가해 주세요 (MVP 우선).
-- 한 기능을 완성할 때마다 멈추고 "여기까지 확인해 보세요"라고 알려주세요.
-- 코드를 짤 때 왜 이렇게 만들었는지 간단히 설명해 주세요.
-- 기술 용어가 나오면 반드시 일상적인 비유로 쉽게 풀어서 설명해 주세요. (예: "API는 식당 주문서 같은 거예요")
+${techStack}
 
-## 개발 지침
-- 모든 UI 텍스트는 한국어로 작성해 주세요.
-- README에 설치 방법과 실행 방법을 포함해 주세요.
-- 가능한 한 단순하고 직관적인 디자인으로 만들어 주세요.
-- 에러가 발생하면 사용자에게 무슨 문제인지 알기 쉽게 보여주세요.
-- 폴더 구조를 깔끔하게 정리하고, 파일마다 역할을 명확히 나눠주세요.${needsExternalApi ? "" : "\n- 외부 API 연동 없이 만들어 주세요. API 키 발급이 필요한 기능은 쓰지 마세요."}
-- 이미지가 필요한 곳은 placeholder 이미지를 사용해 주세요. (예: https://placehold.co)
+${designGuidance}
 
-## 완료 후
-다 만들면 아래 내용을 알려주세요:
-1. 잘 동작하는지 확인하는 방법
-2. 다음에 추가하면 좋을 기능 2~3개 제안
-3. 지금 코드에서 나중에 개선하면 좋을 점`;
+${workStyle}
+- 기술 용어가 나오면 일상적인 비유로 쉽게 풀어서 설명해 주세요.
+
+${devGuidelines}${noExternalApiLine}
+
+${qualityRules}
+
+${ANTI_SLOP_RULES}
+
+${completion}`;
 }

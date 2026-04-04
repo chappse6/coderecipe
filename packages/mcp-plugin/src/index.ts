@@ -47,6 +47,11 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
               description:
                 "만들고 싶은 프로젝트 유형: website(웹사이트), chrome-extension(크롬 확장 프로그램), chatbot(챗봇), webapp(웹앱)",
             },
+            topic: {
+              type: "string",
+              description:
+                "어떤 주제/내용의 프로젝트인지 (예: 카페 소개, 개인 포트폴리오, 독서 기록 관리)",
+            },
             features: {
               type: "array",
               items: { type: "string" },
@@ -62,7 +67,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
               description: "추가 요청 사항이나 설명 (선택 사항)",
             },
           },
-          required: ["projectType", "features"],
+          required: ["projectType", "topic", "features"],
         },
       },
       {
@@ -106,8 +111,9 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
   switch (name) {
     case "build_prompt": {
-      const { projectType, features, referenceUrl, description } = args as {
+      const { projectType, topic, features, referenceUrl, description } = args as {
         projectType: ProjectType;
+        topic: string;
         features: string[];
         referenceUrl?: string;
         description?: string;
@@ -124,6 +130,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       try {
         prompt = buildClaudePrompt({
           projectType,
+          topic,
           features,
           referenceUrl,
           description,

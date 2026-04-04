@@ -11,6 +11,7 @@ import {
   BookOpen,
   MonitorSmartphone,
   HelpCircle,
+  ChefHat,
 } from "lucide-react";
 
 export default function HomePage() {
@@ -49,7 +50,7 @@ export default function HomePage() {
                 </Button>
               </div>
               <p className="mt-6 text-sm text-stone-400 dark:text-stone-500">
-                코딩 경험 없어도 괜찮아요 · 완전 무료
+                코딩 경험 없어도 괜찮아요
               </p>
             </div>
 
@@ -59,8 +60,8 @@ export default function HomePage() {
         </section>
 
         {/* Tools */}
-        <section>
-          <div className="container mx-auto px-4 py-16">
+        <section id="tools">
+          <div className="container mx-auto px-4 pb-8 pt-16">
             <h2 className="mb-10 text-2xl font-bold text-stone-800 dark:text-stone-100">
               무엇을 도와드릴까요?
             </h2>
@@ -89,7 +90,7 @@ export default function HomePage() {
 
         {/* Steps */}
         <section>
-          <div className="container mx-auto px-4 py-16">
+          <div className="container mx-auto px-4 py-10">
             <h2 className="mb-10 text-2xl font-bold text-stone-800 dark:text-stone-100">
               3단계로 앱이 완성돼요
             </h2>
@@ -114,32 +115,53 @@ export default function HomePage() {
         </section>
       </main>
 
-      <footer className="border-t border-stone-200 dark:border-stone-700">
-        <div className="container mx-auto flex items-center justify-between px-4 py-6">
-          <span className="text-sm font-medium text-stone-700 dark:text-stone-300">
-            CodeRecipe
-          </span>
-          <div className="flex flex-wrap gap-4 text-xs text-stone-400 dark:text-stone-500">
-            <Link href="/setup" className="hover:text-stone-700 dark:hover:text-stone-300">
-              환경 진단
-            </Link>
-            <Link href="/guide" className="hover:text-stone-700 dark:hover:text-stone-300">
-              Claude Code 가이드
-            </Link>
-            <Link href="/builder" className="hover:text-stone-700 dark:hover:text-stone-300">
-              레시피 만들기
-            </Link>
-            <Link href="/error-translator" className="hover:text-stone-700 dark:hover:text-stone-300">
-              에러 번역기
-            </Link>
-            <Link href="/glossary" className="hover:text-stone-700 dark:hover:text-stone-300">
-              용어 사전
-            </Link>
-            <Link href="/faq" className="hover:text-stone-700 dark:hover:text-stone-300">
-              자주 묻는 질문
-            </Link>
+      <footer className="border-t border-amber-100 bg-amber-50/50 dark:border-stone-700 dark:bg-stone-900">
+        <div className="container mx-auto px-4 pt-10">
+          {/* Top row: logo + description left, links right */}
+          <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
+            <div>
+              <Link href="/" className="flex items-center gap-2 text-2xl font-bold text-stone-800 dark:text-stone-100">
+                <ChefHat className="h-6 w-6 text-amber-500" />
+                CodeRecipe
+              </Link>
+            </div>
+            <div className="flex flex-wrap gap-x-8 gap-y-2 text-sm text-stone-500 sm:justify-end dark:text-stone-400">
+              <Link href="/setup" className="transition-colors hover:text-stone-800 dark:hover:text-stone-200">
+                환경 진단
+              </Link>
+              <Link href="/guide" className="transition-colors hover:text-stone-800 dark:hover:text-stone-200">
+                가이드
+              </Link>
+              <Link href="/builder" className="transition-colors hover:text-stone-800 dark:hover:text-stone-200">
+                레시피 만들기
+              </Link>
+              <Link href="/error-translator" className="transition-colors hover:text-stone-800 dark:hover:text-stone-200">
+                에러 번역기
+              </Link>
+              <Link href="/glossary" className="transition-colors hover:text-stone-800 dark:hover:text-stone-200">
+                용어 사전
+              </Link>
+              <Link href="/faq" className="transition-colors hover:text-stone-800 dark:hover:text-stone-200">
+                FAQ
+              </Link>
+            </div>
+          </div>
+
+          {/* Copyright + Illustration row */}
+          <div className="mt-8 text-center">
+            <span className="text-xs text-stone-400 dark:text-stone-500">
+              © 2026 CodeRecipe
+            </span>
           </div>
         </div>
+
+        {/* Illustration — full width, flush bottom */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/coderecipe/images/footer-illustration.png"
+          alt="CodeRecipe — 코드 재료를 요리하는 일러스트"
+          className="mt-4 mx-auto block w-full max-w-[1504px] object-contain dark:opacity-80"
+        />
       </footer>
     </div>
   );

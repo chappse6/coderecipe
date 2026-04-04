@@ -68,14 +68,28 @@ describe("translateError", () => {
 // ── buildClaudePrompt ──────────────────────────────────────────────────────────
 
 describe("buildClaudePrompt", () => {
+  const baseTopic = "동네 카페 소개";
+
   it("includes '기본 기능' when features is empty", () => {
-    const result = buildClaudePrompt({ projectType: "website", features: [] });
+    const result = buildClaudePrompt({ projectType: "website", topic: baseTopic, features: [] });
     expect(result).toContain("기본 기능");
+  });
+
+  it("includes topic in prompt output", () => {
+    const result = buildClaudePrompt({ projectType: "website", topic: baseTopic, features: [] });
+    expect(result).toContain("동네 카페 소개");
+  });
+
+  it("throws when topic is empty", () => {
+    expect(() =>
+      buildClaudePrompt({ projectType: "website", topic: "  ", features: [] })
+    ).toThrow("주제를 입력해 주세요");
   });
 
   it("includes feature label for contact-form", () => {
     const result = buildClaudePrompt({
       projectType: "website",
+      topic: baseTopic,
       features: ["contact-form"],
     });
     expect(result).toContain("문의하기 양식");
@@ -84,6 +98,7 @@ describe("buildClaudePrompt", () => {
   it("includes 참고 서비스 section when referenceUrl is provided", () => {
     const result = buildClaudePrompt({
       projectType: "website",
+      topic: baseTopic,
       features: [],
       referenceUrl: "https://example.com",
     });
@@ -94,6 +109,7 @@ describe("buildClaudePrompt", () => {
   it("omits 참고 서비스 section when referenceUrl is undefined", () => {
     const result = buildClaudePrompt({
       projectType: "website",
+      topic: baseTopic,
       features: [],
       referenceUrl: undefined,
     });
@@ -103,6 +119,7 @@ describe("buildClaudePrompt", () => {
   it("omits 참고 서비스 section when referenceUrl is empty string", () => {
     const result = buildClaudePrompt({
       projectType: "website",
+      topic: baseTopic,
       features: [],
       referenceUrl: "",
     });
@@ -112,6 +129,7 @@ describe("buildClaudePrompt", () => {
   it("omits 참고 서비스 section when referenceUrl is whitespace-only", () => {
     const result = buildClaudePrompt({
       projectType: "website",
+      topic: baseTopic,
       features: [],
       referenceUrl: "   ",
     });
@@ -122,6 +140,7 @@ describe("buildClaudePrompt", () => {
     expect(() =>
       buildClaudePrompt({
         projectType: "website",
+        topic: baseTopic,
         features: [],
         referenceUrl: "javascript:alert(1)",
       })
@@ -130,17 +149,38 @@ describe("buildClaudePrompt", () => {
 
   it("throws for invalid projectType", () => {
     expect(() =>
-      buildClaudePrompt({ projectType: "invalid" as any, features: [] })
+      buildClaudePrompt({ projectType: "invalid" as any, topic: baseTopic, features: [] })
     ).toThrow("유효하지 않은 프로젝트 유형입니다");
   });
 
   it("includes 추가 요청 사항 section when description is provided", () => {
     const result = buildClaudePrompt({
       projectType: "website",
+      topic: baseTopic,
       features: [],
       description: "초록색 테마로 만들어 주세요",
     });
     expect(result).toContain("## 추가 요청 사항");
     expect(result).toContain("초록색 테마로 만들어 주세요");
+  });
+
+  it("generates type-specific design guidance for webapp", () => {
+    const result = buildClaudePrompt({
+      projectType: "webapp",
+      topic: "독서 기록 관리",
+      features: ["login"],
+    });
+    expect(result).toContain("디자인 원칙");
+    expect(result).toContain("독서 기록 관리");
+  });
+
+  it("generates type-specific design guidance for chrome-extension", () => {
+    const result = buildClaudePrompt({
+      projectType: "chrome-extension",
+      topic: "유튜브 메모",
+      features: ["popup"],
+    });
+    expect(result).toContain("Manifest V3");
+    expect(result).toContain("유튜브 메모");
   });
 });
