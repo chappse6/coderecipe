@@ -76,6 +76,5 @@ Node.js 20+, pnpm 9+ 필요.
 
 Built with Claude Code.
 
----
 
 ![CodeRecipe Illustration](docs/footer-illustration.png)
