@@ -20,7 +20,7 @@ export function ComingSoonCard({
     <button
       type="button"
       onClick={() => alert("구현 예정이에요! 조금만 기다려 주세요.")}
-      className="group relative h-40 cursor-default overflow-hidden rounded-3xl border border-dashed border-stone-300 bg-stone-50 px-6 py-6 text-left transition-all duration-300 hover:border-stone-400 dark:border-stone-600 dark:bg-stone-800 dark:hover:border-stone-500"
+      className="group relative h-32 cursor-default overflow-hidden rounded-3xl border border-dashed border-stone-300 bg-stone-50 px-6 py-5 text-left transition-all duration-300 hover:border-stone-400 dark:border-stone-600 dark:bg-stone-800 dark:hover:border-stone-500"
     >
       <h3 className="relative z-10 text-xl font-bold text-stone-400 dark:text-stone-500">
         {title}
