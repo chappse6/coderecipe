@@ -4,6 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Nav } from "@/components/layout/nav";
 import TerminalTyping from "@/components/terminal-typing";
 import { ComingSoonCard } from "@/components/coming-soon-card";
+import { ScrollSteps } from "@/components/landing/scroll-steps";
+import { StatsSection } from "@/components/landing/stats-section";
+import { FinalCta } from "@/components/landing/final-cta";
 import {
   Settings2,
   Wand2,
@@ -12,6 +15,11 @@ import {
   MonitorSmartphone,
   HelpCircle,
   ChefHat,
+  ArrowRight,
+  Briefcase,
+  GraduationCap,
+  Lightbulb,
+  Github,
 } from "lucide-react";
 
 export default function HomePage() {
@@ -20,57 +28,59 @@ export default function HomePage() {
       <Nav />
 
       <main>
-        {/* Hero */}
-        <section className="container mx-auto px-4 pb-6 pt-12 lg:pb-8 lg:pt-16">
-          <div className="grid items-center gap-12 lg:grid-cols-2">
-            <div>
-              <p className="mb-4 text-sm font-medium text-orange-500 dark:text-amber-400">
-                Claude Code + CodeRecipe
-              </p>
-              <h1 className="mb-5 text-5xl font-bold tracking-tight text-stone-800 dark:text-stone-100 sm:text-6xl">
-                코딩 없이{" "}
-                <span className="text-amber-500 dark:text-amber-400">
-                  앱을 만들어요
-                </span>
-              </h1>
-              <p className="mb-8 max-w-lg text-lg text-stone-600 dark:text-stone-400">
-                원하는 앱을 설명하면 Claude Code가 단계별 레시피를 만들어 드려요.
-                요리하듯 따라하면 어느새 나만의 앱이 완성됩니다.
-              </p>
-              <div className="flex flex-wrap gap-3">
-                <Button
-                  size="lg"
-                  className="bg-recipe-primary hover:bg-recipe-primary-hover text-stone-800"
-                  asChild
-                >
-                  <Link href="/builder">레시피 시작하기</Link>
-                </Button>
-                <Button size="lg" variant="outline" asChild>
-                  <Link href="/setup">환경 진단 먼저</Link>
-                </Button>
+        {/* First screen: Hero + Tools */}
+        <div className="lg:flex lg:min-h-[calc(100dvh-57px)] lg:flex-col">
+          {/* Hero */}
+          <section className="lg:flex lg:flex-1 lg:items-center">
+            <div className="container mx-auto grid items-center gap-8 px-4 py-8 lg:grid-cols-2 lg:gap-8">
+              <div>
+                <p className="mb-2 text-sm font-medium text-orange-500 dark:text-amber-400">
+                  Claude Code + CodeRecipe
+                </p>
+                <h1 className="mb-3 text-4xl font-bold tracking-tight text-stone-800 dark:text-stone-100 lg:text-5xl">
+                  코딩 없이{" "}
+                  <span className="text-amber-500 dark:text-amber-400">
+                    앱을 만들어요
+                  </span>
+                </h1>
+                <p className="mb-5 max-w-lg text-base text-stone-600 dark:text-stone-400 lg:text-lg">
+                  원하는 앱을 설명하면 Claude Code가 단계별 레시피를 만들어 드려요.
+                  요리하듯 따라하면 어느새 나만의 앱이 완성됩니다.
+                </p>
+                <div className="flex flex-wrap gap-3">
+                  <Button
+                    size="lg"
+                    className="bg-recipe-primary hover:bg-recipe-primary-hover text-stone-800"
+                    asChild
+                  >
+                    <Link href="/builder">레시피 시작하기</Link>
+                  </Button>
+                  <Button size="lg" variant="outline" asChild>
+                    <Link href="/setup">환경 진단 먼저</Link>
+                  </Button>
+                </div>
+                <p className="mt-3 text-sm text-stone-400 dark:text-stone-500">
+                  코딩 경험 없어도 괜찮아요
+                </p>
               </div>
-              <p className="mt-6 text-sm text-stone-400 dark:text-stone-500">
-                코딩 경험 없어도 괜찮아요
-              </p>
+
+              {/* Animated terminal */}
+              <TerminalTyping height={280} />
             </div>
+          </section>
 
-            {/* Animated terminal */}
-            <TerminalTyping />
-          </div>
-        </section>
-
-        {/* Tools */}
-        <section id="tools">
-          <div className="container mx-auto px-4 pb-8 pt-16">
-            <h2 className="mb-10 text-2xl font-bold text-stone-800 dark:text-stone-100">
-              무엇을 도와드릴까요?
-            </h2>
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {/* Tools */}
+          <section id="tools" className="lg:flex-shrink-0">
+            <div className="container mx-auto px-4 pb-6 pt-4">
+              <h2 className="mb-5 text-2xl font-bold text-stone-800 dark:text-stone-100">
+                무엇을 도와드릴까요?
+              </h2>
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
               {tools.map((tool) => (
                 <Link
                   key={tool.href}
                   href={tool.href}
-                  className="group relative h-40 overflow-hidden rounded-3xl border border-stone-200 bg-stone-50 px-6 py-6 transition-all duration-300 hover:border-transparent hover:bg-recipe-primary hover:shadow-lg dark:border-stone-700 dark:bg-stone-800 dark:hover:bg-recipe-primary"
+                  className="group relative h-32 overflow-hidden rounded-3xl border border-stone-200 bg-stone-50 px-6 py-5 transition-all duration-300 hover:border-transparent hover:bg-recipe-primary hover:shadow-lg dark:border-stone-700 dark:bg-stone-800 dark:hover:bg-recipe-primary"
                 >
                   <h3 className="relative z-10 text-xl font-bold text-amber-500 transition-colors duration-300 group-hover:text-stone-800 dark:text-amber-400">
                     {tool.title}
@@ -87,32 +97,135 @@ export default function HomePage() {
             </div>
           </div>
         </section>
+        </div>
 
-        {/* Steps */}
+        {/* Steps — scroll-based with sticky GIF */}
+        <ScrollSteps />
+        {/* Before / After */}
+        <section className="bg-stone-50 dark:bg-stone-900">
+          <div className="container mx-auto px-4 py-16">
+            <div className="mb-4 text-center">
+              <p className="mb-2 text-sm font-medium text-amber-500">
+                이렇게 말하면, 이런 앱이 나와요
+              </p>
+              <h2 className="text-2xl font-bold text-stone-800 dark:text-stone-100 sm:text-3xl">
+                Before → After
+              </h2>
+            </div>
+            <p className="mx-auto mb-12 max-w-lg text-center text-sm text-stone-500 dark:text-stone-400">
+              한 줄 설명만 입력하면 Claude Code가 완성된 앱을 만들어 드려요
+            </p>
+
+            <div className="mx-auto max-w-5xl space-y-8">
+              {demos.map((demo) => (
+                <div
+                  key={demo.title}
+                  className="overflow-hidden rounded-2xl border border-stone-200 bg-white dark:border-stone-700 dark:bg-stone-800"
+                >
+                  <div className="grid lg:grid-cols-2">
+                    {/* Before — 프롬프트 */}
+                    <div className="flex flex-col justify-center border-b border-stone-200 p-6 lg:border-b-0 lg:border-r dark:border-stone-700">
+                      <span className="mb-3 inline-flex w-fit items-center gap-1.5 rounded-full bg-stone-100 px-3 py-1 text-xs font-medium text-stone-500 dark:bg-stone-700 dark:text-stone-400">
+                        입력
+                      </span>
+                      <p className="text-lg font-medium leading-relaxed text-stone-800 dark:text-stone-100">
+                        &ldquo;{demo.prompt}&rdquo;
+                      </p>
+                    </div>
+                    {/* After — 결과 미리보기 */}
+                    <div className="bg-stone-50 p-6 dark:bg-stone-900">
+                      <span className="mb-3 inline-flex w-fit items-center gap-1.5 rounded-full bg-amber-100 px-3 py-1 text-xs font-medium text-amber-700 dark:bg-amber-900/40 dark:text-amber-400">
+                        결과
+                      </span>
+                      <p className="mb-3 font-semibold text-stone-800 dark:text-stone-100">
+                        {demo.title}
+                      </p>
+                      {/* 목업 UI */}
+                      <div className="overflow-hidden rounded-lg border border-stone-200 bg-white dark:border-stone-600 dark:bg-stone-800">
+                        {/* 브라우저 탑바 */}
+                        <div className="flex items-center gap-1.5 border-b border-stone-200 bg-stone-100 px-3 py-2 dark:border-stone-600 dark:bg-stone-700">
+                          <div className="h-2 w-2 rounded-full bg-red-400" />
+                          <div className="h-2 w-2 rounded-full bg-yellow-400" />
+                          <div className="h-2 w-2 rounded-full bg-green-400" />
+                          <div className="ml-2 h-4 flex-1 rounded bg-stone-200 dark:bg-stone-600" />
+                        </div>
+                        {/* 앱 내용 스켈레톤 */}
+                        <div className="space-y-3 p-4">
+                          {demo.skeleton}
+                        </div>
+                      </div>
+                      <div className="mt-3 flex flex-wrap gap-1.5">
+                        {demo.tags.map((tag) => (
+                          <span
+                            key={tag}
+                            className="rounded bg-stone-100 px-2 py-0.5 text-[11px] text-stone-500 dark:bg-stone-700 dark:text-stone-400"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-10 text-center">
+              <Button
+                size="lg"
+                className="gap-2 bg-recipe-primary text-stone-800 hover:bg-recipe-primary-hover"
+                asChild
+              >
+                <Link href="/builder">
+                  나도 만들어보기
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </Button>
+            </div>
+          </div>
+        </section>
+
+        {/* Persona */}
         <section>
-          <div className="container mx-auto px-4 py-10">
-            <h2 className="mb-10 text-2xl font-bold text-stone-800 dark:text-stone-100">
-              3단계로 앱이 완성돼요
-            </h2>
-            <div className="grid gap-8 sm:grid-cols-3">
-              {steps.map((s, i) => (
-                <div key={s.title} className="flex gap-4">
-                  <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border-2 border-stone-200 text-sm font-bold text-stone-500 dark:border-stone-700 dark:text-stone-400">
-                    {i + 1}
+          <div className="container mx-auto px-4 py-16">
+            <div className="mb-12 text-center">
+              <h2 className="text-2xl font-bold text-stone-800 dark:text-stone-100 sm:text-3xl">
+                이런 분을 위한 서비스예요
+              </h2>
+              <p className="mt-3 text-stone-500 dark:text-stone-400">
+                코딩을 모르는 분도, 조금 아는 분도, 누구나 환영합니다
+              </p>
+            </div>
+
+            <div className="mx-auto grid max-w-4xl gap-6 sm:grid-cols-3">
+              {personas.map((p) => (
+                <div
+                  key={p.title}
+                  className="group rounded-2xl border border-stone-200 bg-white p-6 transition-all hover:border-amber-300 hover:shadow-md dark:border-stone-700 dark:bg-stone-800 dark:hover:border-amber-500/50"
+                >
+                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-amber-50 text-amber-500 transition-colors group-hover:bg-amber-100 dark:bg-amber-900/30 dark:group-hover:bg-amber-900/50">
+                    <p.icon className="h-6 w-6" />
                   </div>
-                  <div>
-                    <h3 className="mb-1 font-semibold text-stone-800 dark:text-stone-100">
-                      {s.title}
-                    </h3>
-                    <p className="text-sm text-stone-500 dark:text-stone-400">
-                      {s.description}
-                    </p>
-                  </div>
+                  <h3 className="mb-1 font-bold text-stone-800 dark:text-stone-100">
+                    {p.title}
+                  </h3>
+                  <p className="mb-3 text-sm leading-relaxed text-stone-500 dark:text-stone-400">
+                    {p.description}
+                  </p>
+                  <p className="text-sm font-medium text-amber-600 dark:text-amber-400">
+                    &ldquo;{p.quote}&rdquo;
+                  </p>
                 </div>
               ))}
             </div>
           </div>
         </section>
+
+        {/* Stats */}
+        <StatsSection />
+
+        {/* Final CTA */}
+        <FinalCta />
       </main>
 
       <footer className="border-t border-amber-100 bg-amber-50/50 dark:border-stone-700 dark:bg-stone-900">
@@ -147,10 +260,21 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Copyright + Illustration row */}
-          <div className="mt-8 text-center">
-            <span className="text-xs text-stone-400 dark:text-stone-500">
-              © 2026 CodeRecipe
+          {/* Copyright */}
+          <div className="mt-8 flex items-center justify-center gap-3 text-xs text-stone-400 dark:text-stone-500">
+            <span>© 2026 CodeRecipe</span>
+            <span className="h-3 w-px bg-stone-300 dark:bg-stone-600" />
+            <span className="flex items-center gap-1.5">
+              Built by Seeun
+              <a
+                href="https://github.com/chappse6"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-stone-400 transition-colors hover:text-stone-600 dark:text-stone-500 dark:hover:text-stone-300"
+                aria-label="GitHub"
+              >
+                <Github className="h-3.5 w-3.5" />
+              </a>
             </span>
           </div>
         </div>
@@ -167,38 +291,34 @@ export default function HomePage() {
   );
 }
 
-const tools: {
-  href: string;
-  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
-  title: string;
-}[] = [
+const tools = [
   {
-    href: "/setup",
+    href: "/setup" as const,
     icon: Settings2,
     title: "환경 진단",
   },
   {
-    href: "/guide",
+    href: "/guide" as const,
     icon: MonitorSmartphone,
     title: "Claude Code 가이드",
   },
   {
-    href: "/builder",
+    href: "/builder" as const,
     icon: Wand2,
     title: "레시피 만들기",
   },
   {
-    href: "/error-translator",
+    href: "/error-translator" as const,
     icon: AlertCircle,
     title: "에러 번역기",
   },
   {
-    href: "/glossary",
+    href: "/glossary" as const,
     icon: BookOpen,
     title: "용어 사전",
   },
   {
-    href: "/faq",
+    href: "/faq" as const,
     icon: HelpCircle,
     title: "자주 묻는 질문",
   },
@@ -209,19 +329,117 @@ const soonTools: { title: string; iconName: string }[] = [
   { title: "다음에 뭐 하지?", iconName: "Compass" },
 ];
 
-const steps = [
+
+const demos: {
+  prompt: string;
+  title: string;
+  tags: string[];
+  skeleton: React.ReactNode;
+}[] = [
   {
-    title: "환경 설정",
-    description: "필요한 프로그램을 확인하고 설치해요. 클릭 몇 번으로 끝나요.",
+    prompt: "할 일을 추가하고 완료 체크할 수 있는 투두앱 만들어줘",
+    title: "Todo 앱",
+    tags: ["React", "LocalStorage", "반응형"],
+    skeleton: (
+      <>
+        <div className="flex items-center gap-2">
+          <div className="h-4 w-4 rounded border-2 border-amber-400" />
+          <div className="h-3 w-32 rounded bg-stone-200 dark:bg-stone-600" />
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="flex h-4 w-4 items-center justify-center rounded border-2 border-green-400 bg-green-400">
+            <span className="text-[8px] text-white">✓</span>
+          </div>
+          <div className="h-3 w-24 rounded bg-stone-200 line-through dark:bg-stone-600" />
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="h-4 w-4 rounded border-2 border-amber-400" />
+          <div className="h-3 w-40 rounded bg-stone-200 dark:bg-stone-600" />
+        </div>
+        <div className="mt-2 flex gap-2">
+          <div className="h-7 flex-1 rounded bg-stone-100 dark:bg-stone-700" />
+          <div className="h-7 w-14 rounded bg-amber-400" />
+        </div>
+      </>
+    ),
   },
   {
-    title: "레시피 만들기",
-    description:
-      "만들고 싶은 앱을 설명하면 Claude Code 프롬프트가 자동으로 완성돼요.",
+    prompt: "내 이름, 기술 스택, 프로젝트를 보여주는 포트폴리오 사이트",
+    title: "포트폴리오 사이트",
+    tags: ["Next.js", "반응형", "다크모드"],
+    skeleton: (
+      <>
+        <div className="flex items-center justify-between">
+          <div className="h-3 w-20 rounded bg-stone-800 dark:bg-stone-200" />
+          <div className="flex gap-3">
+            <div className="h-2 w-10 rounded bg-stone-200 dark:bg-stone-600" />
+            <div className="h-2 w-10 rounded bg-stone-200 dark:bg-stone-600" />
+            <div className="h-2 w-10 rounded bg-stone-200 dark:bg-stone-600" />
+          </div>
+        </div>
+        <div className="mt-2 space-y-2 py-4">
+          <div className="h-5 w-48 rounded bg-stone-800 dark:bg-stone-200" />
+          <div className="h-3 w-64 rounded bg-stone-200 dark:bg-stone-600" />
+          <div className="flex gap-2 pt-1">
+            <div className="h-5 w-14 rounded-full bg-amber-100 dark:bg-amber-900/40" />
+            <div className="h-5 w-16 rounded-full bg-blue-100 dark:bg-blue-900/40" />
+            <div className="h-5 w-12 rounded-full bg-green-100 dark:bg-green-900/40" />
+          </div>
+        </div>
+        <div className="grid grid-cols-2 gap-2">
+          <div className="h-16 rounded bg-stone-100 dark:bg-stone-700" />
+          <div className="h-16 rounded bg-stone-100 dark:bg-stone-700" />
+        </div>
+      </>
+    ),
   },
   {
-    title: "앱 완성",
+    prompt: "우리 카페 메뉴판이랑 위치를 보여주는 홈페이지",
+    title: "카페 홈페이지",
+    tags: ["웹사이트", "지도 연동", "메뉴판"],
+    skeleton: (
+      <>
+        <div className="h-20 rounded bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20" />
+        <div className="grid grid-cols-3 gap-2">
+          <div className="space-y-1 rounded bg-stone-50 p-2 dark:bg-stone-700">
+            <div className="h-2 w-14 rounded bg-stone-300 dark:bg-stone-500" />
+            <div className="h-2 w-8 rounded bg-amber-300" />
+          </div>
+          <div className="space-y-1 rounded bg-stone-50 p-2 dark:bg-stone-700">
+            <div className="h-2 w-12 rounded bg-stone-300 dark:bg-stone-500" />
+            <div className="h-2 w-8 rounded bg-amber-300" />
+          </div>
+          <div className="space-y-1 rounded bg-stone-50 p-2 dark:bg-stone-700">
+            <div className="h-2 w-16 rounded bg-stone-300 dark:bg-stone-500" />
+            <div className="h-2 w-8 rounded bg-amber-300" />
+          </div>
+        </div>
+        <div className="h-14 rounded bg-green-50 dark:bg-green-900/20" />
+      </>
+    ),
+  },
+];
+
+const personas = [
+  {
+    icon: Briefcase,
+    title: "사이드 프로젝트가 하고 싶은 직장인",
     description:
-      "만들어진 프롬프트를 Claude Code에 붙여넣으면 AI가 코드를 작성해줘요.",
+      "아이디어는 있는데 개발자를 구하기 어렵고, 외주 맡기기엔 비용이 부담되는 분",
+    quote: "주말에 혼자서 MVP 하나 뚝딱 만들어보고 싶어요",
+  },
+  {
+    icon: GraduationCap,
+    title: "포트폴리오가 필요한 학생",
+    description:
+      "취업 준비에 포트폴리오가 필요한데, 코딩 수업만으로는 결과물을 만들기 어려운 분",
+    quote: "면접에서 보여줄 프로젝트가 하나도 없어요",
+  },
+  {
+    icon: Lightbulb,
+    title: "업무를 자동화하고 싶은 비개발자",
+    description:
+      "반복 업무를 줄이고 싶은데, 엑셀 매크로 수준을 넘어서는 도구가 필요한 분",
+    quote: "매일 똑같은 작업을 수작업으로 하는 게 너무 비효율적이에요",
   },
 ];
