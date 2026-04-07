@@ -75,3 +75,7 @@ Node.js 20+, pnpm 9+ 필요.
 **Seeun** — [GitHub](https://github.com/chappse6)
 
 Built with Claude Code.
+
+---
+
+![CodeRecipe Illustration](docs/footer-illustration.png)
