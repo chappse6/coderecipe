@@ -6,8 +6,6 @@
 
 ![CodeRecipe Screenshot](docs/screenshot-hero.png)
 
----
-
 ## 왜 만들었나
 
 Claude Code는 강력하지만, 코딩을 모르는 사람에게는 "그래서 뭘 입력하면 되는데?"가 첫 번째 벽이다.
