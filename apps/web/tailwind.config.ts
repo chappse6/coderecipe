@@ -9,6 +9,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        suit: ["'SUIT Variable'", "ui-sans-serif", "system-ui", "sans-serif"],
+      },
       colors: {
         recipe: {
           primary: { DEFAULT: "#FCCA59", hover: "#F5BC3B" },

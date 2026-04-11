@@ -40,196 +40,252 @@ const steps = [
 ];
 
 export function ScrollSteps() {
-  const [activeStep, setActiveStep] = useState(0);
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const stepRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const [progress, setProgress] = useState(0); // 0~100 overall progress
+  const triggerRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+
+  // Derive activeStep from progress so bar and content are always in sync
+  const activeStep = Math.min(
+    steps.length - 1,
+    Math.floor((progress / 100) * steps.length)
+  );
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const index = stepRefs.current.indexOf(
-              entry.target as HTMLDivElement
-            );
-            if (index !== -1) setActiveStep(index);
-          }
-        });
-      },
-      { threshold: 0.5 }
-    );
+    const handleScroll = () => {
+      const wrapper = wrapperRef.current;
+      if (!wrapper) return;
 
-    stepRefs.current.forEach((ref) => {
-      if (ref) observer.observe(ref);
-    });
+      const rect = wrapper.getBoundingClientRect();
+      const totalHeight = rect.height - window.innerHeight;
+      if (totalHeight <= 0) return;
 
-    return () => observer.disconnect();
+      const scrolled = -rect.top;
+      const pct = Math.max(0, Math.min(100, (scrolled / totalHeight) * 100));
+      setProgress(pct);
+    };
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
-    <section ref={sectionRef} className="relative bg-stone-50 dark:bg-stone-900">
-      {/* Section header */}
-      <div className="container mx-auto px-4 pt-20 pb-8">
-        <p className="mb-2 text-center text-sm font-medium text-amber-500">
-          How it works
-        </p>
-        <h2 className="text-center text-3xl font-bold text-stone-800 dark:text-stone-100 sm:text-4xl">
-          3단계로 앱이 완성돼요
-        </h2>
+    <section className="relative bg-stone-50 dark:bg-stone-900">
+      {/* Desktop: both sides sticky, scroll triggers in background */}
+      <div className="hidden lg:block">
+        <div className="container relative mx-auto px-4">
+          {/* Scroll trigger spacers — invisible, just for height */}
+          <div ref={wrapperRef} className="relative">
+            {steps.map((_, i) => (
+              <div
+                key={i}
+                ref={(el) => { triggerRefs.current[i] = el; }}
+                className="h-[70vh]"
+              />
+            ))}
+
+            {/* Sticky overlay: text left, GIF right */}
+            <div className="pointer-events-none absolute inset-0 flex">
+              {/* Left: sticky text */}
+              <div className="w-1/2 pr-8">
+                <div className="sticky top-0 flex h-screen items-center">
+                  <div>
+                    <div className="relative">
+                      {steps.map((step, i) => (
+                        <div
+                          key={step.number}
+                          className={`transition-all duration-500 ${
+                            activeStep === i
+                              ? "pointer-events-auto relative opacity-100"
+                              : "pointer-events-none absolute inset-0 opacity-0"
+                          }`}
+                        >
+                          {/* Step number + icon */}
+                          <div className="mb-6 flex items-center gap-4">
+                            <div
+                              className={`flex h-16 w-16 items-center justify-center rounded-2xl ${step.bgColor}`}
+                            >
+                              <step.icon className={`h-8 w-8 ${step.color}`} />
+                            </div>
+                            <span className="text-6xl font-black text-stone-200 dark:text-stone-700">
+                              {step.number}
+                            </span>
+                          </div>
+
+                          <h3 className="mb-1 text-3xl font-bold text-stone-800 dark:text-stone-100">
+                            {step.title}
+                          </h3>
+                          <p className={`mb-4 font-medium ${step.color}`}>
+                            {step.subtitle}
+                          </p>
+
+                          <p className="max-w-lg whitespace-pre-line text-lg leading-relaxed text-stone-600 dark:text-stone-400">
+                            {step.description}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Continuous progress bar */}
+                    <div className="mt-8 flex items-center gap-3">
+                      <div className="flex gap-1.5">
+                        {steps.map((_, j) => {
+                          // Each segment: 0-33%, 33-66%, 66-100%
+                          const segStart = (j / steps.length) * 100;
+                          const segEnd = ((j + 1) / steps.length) * 100;
+                          const segFill =
+                            progress >= segEnd
+                              ? 100
+                              : progress <= segStart
+                              ? 0
+                              : ((progress - segStart) / (segEnd - segStart)) * 100;
+
+                          return (
+                            <div
+                              key={j}
+                              className="h-1.5 w-10 overflow-hidden rounded-full bg-stone-200 dark:bg-stone-600"
+                            >
+                              <div
+                                className="h-full rounded-full bg-amber-400 transition-[width] duration-150 ease-out"
+                                style={{ width: `${segFill}%` }}
+                              />
+                            </div>
+                          );
+                        })}
+                      </div>
+                      <span className="text-xs font-medium text-stone-400 dark:text-stone-500">
+                        {activeStep + 1} / {steps.length}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right: sticky GIF */}
+              <div className="w-1/2 pl-8">
+                <div className="sticky top-0 flex h-screen items-center justify-center">
+                  <div className="relative w-full max-w-xl">
+                    <div className="overflow-hidden rounded-xl border border-stone-200 bg-white shadow-2xl dark:border-stone-700 dark:bg-stone-800">
+                      <div className="flex items-center gap-2 border-b border-stone-200 bg-stone-100 px-4 py-3 dark:border-stone-700 dark:bg-stone-900">
+                        <div className="flex gap-1.5">
+                          <div className="h-3 w-3 rounded-full bg-red-400" />
+                          <div className="h-3 w-3 rounded-full bg-yellow-400" />
+                          <div className="h-3 w-3 rounded-full bg-green-400" />
+                        </div>
+                        <div className="ml-2 flex-1 rounded-md bg-stone-200 px-3 py-1 text-xs text-stone-400 dark:bg-stone-700 dark:text-stone-500">
+                          coderecipe.dev
+                        </div>
+                      </div>
+
+                      <div className="relative aspect-[4/3] bg-stone-50 dark:bg-stone-900">
+                        {steps.map((step, i) => (
+                          <div
+                            key={step.number}
+                            className={`absolute inset-0 flex flex-col items-center justify-center gap-4 p-8 transition-all duration-500 ${
+                              activeStep === i
+                                ? "scale-100 opacity-100"
+                                : "scale-95 opacity-0"
+                            }`}
+                          >
+                            <div
+                              className={`flex h-20 w-20 items-center justify-center rounded-2xl ${step.bgColor}`}
+                            >
+                              <step.icon className={`h-10 w-10 ${step.color}`} />
+                            </div>
+                            <div className="text-center">
+                              <p className="text-sm font-medium text-stone-400 dark:text-stone-500">
+                                GIF 플레이스홀더
+                              </p>
+                              <p className="mt-1 text-xs text-stone-300 dark:text-stone-600">
+                                {step.gif}
+                              </p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Floating badge */}
+                    <div
+                      className={`absolute -bottom-4 -right-4 rounded-full px-4 py-2 text-sm font-bold text-white shadow-lg transition-all duration-500 ${
+                        activeStep === 0
+                          ? "bg-blue-500"
+                          : activeStep === 1
+                          ? "bg-amber-500"
+                          : "bg-green-500"
+                      }`}
+                    >
+                      Step {activeStep + 1} / 3
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      {/* Sticky scroll area */}
-      <div className="container relative mx-auto px-4 lg:flex">
-        {/* Left: scrollable steps */}
-        <div className="lg:w-1/2">
+      {/* Mobile: simple stacked layout */}
+      <div className="lg:hidden">
+        <div className="container mx-auto px-4 pb-12">
           {steps.map((step, i) => (
-            <div
-              key={step.number}
-              ref={(el) => {
-                stepRefs.current[i] = el;
-              }}
-              className="flex min-h-[70vh] items-center lg:min-h-screen lg:pr-12"
-            >
-              <div
-                className={`max-w-md transition-opacity duration-500 ${
-                  activeStep === i ? "opacity-100" : "lg:opacity-30"
-                }`}
-              >
-                {/* Step number + icon */}
-                <div className="mb-6 flex items-center gap-4">
-                  <div
-                    className={`flex h-14 w-14 items-center justify-center rounded-2xl ${step.bgColor}`}
-                  >
-                    <step.icon className={`h-7 w-7 ${step.color}`} />
+            <div key={step.number} className="py-10">
+              <div className="mb-6 flex items-center gap-4">
+                <div
+                  className={`flex h-14 w-14 items-center justify-center rounded-2xl ${step.bgColor}`}
+                >
+                  <step.icon className={`h-7 w-7 ${step.color}`} />
+                </div>
+                <span className="text-5xl font-black text-stone-200 dark:text-stone-700">
+                  {step.number}
+                </span>
+              </div>
+              <h3 className="mb-1 text-2xl font-bold text-stone-800 dark:text-stone-100">
+                {step.title}
+              </h3>
+              <p className={`mb-4 text-sm font-medium ${step.color}`}>
+                {step.subtitle}
+              </p>
+              <p className="mb-6 whitespace-pre-line text-base leading-relaxed text-stone-600 dark:text-stone-400">
+                {step.description}
+              </p>
+
+              {/* Mobile GIF */}
+              <div className="mx-auto max-w-sm">
+                <div className="overflow-hidden rounded-xl border border-stone-200 bg-white shadow-lg dark:border-stone-700 dark:bg-stone-800">
+                  <div className="flex items-center gap-1.5 border-b border-stone-200 bg-stone-100 px-3 py-2 dark:border-stone-700 dark:bg-stone-900">
+                    <div className="h-2 w-2 rounded-full bg-red-400" />
+                    <div className="h-2 w-2 rounded-full bg-yellow-400" />
+                    <div className="h-2 w-2 rounded-full bg-green-400" />
                   </div>
-                  <span className="text-5xl font-black text-stone-200 dark:text-stone-700">
-                    {step.number}
-                  </span>
+                  <div className="flex aspect-[4/3] items-center justify-center bg-stone-50 p-6 dark:bg-stone-900">
+                    <div className="text-center">
+                      <div
+                        className={`mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-2xl ${step.bgColor}`}
+                      >
+                        <step.icon className={`h-8 w-8 ${step.color}`} />
+                      </div>
+                      <p className="text-xs text-stone-400">GIF 플레이스홀더</p>
+                    </div>
+                  </div>
                 </div>
+              </div>
 
-                {/* Title */}
-                <h3 className="mb-1 text-2xl font-bold text-stone-800 dark:text-stone-100">
-                  {step.title}
-                </h3>
-                <p className={`mb-4 text-sm font-medium ${step.color}`}>
-                  {step.subtitle}
-                </p>
-
-                {/* Description */}
-                <p className="whitespace-pre-line text-base leading-relaxed text-stone-600 dark:text-stone-400">
-                  {step.description}
-                </p>
-
-                {/* Progress indicator */}
-                <div className="mt-8 flex gap-2">
-                  {steps.map((_, j) => (
-                    <div
-                      key={j}
-                      className={`h-1 rounded-full transition-all duration-500 ${
-                        j === i
-                          ? "w-8 bg-amber-400"
-                          : "w-4 bg-stone-300 dark:bg-stone-600"
-                      }`}
-                    />
-                  ))}
-                </div>
+              {/* Progress dots */}
+              <div className="mt-6 flex justify-center gap-2">
+                {steps.map((_, j) => (
+                  <div
+                    key={j}
+                    className={`h-1 rounded-full ${
+                      j === i
+                        ? "w-8 bg-amber-400"
+                        : "w-4 bg-stone-300 dark:bg-stone-600"
+                    }`}
+                  />
+                ))}
               </div>
             </div>
           ))}
-        </div>
-
-        {/* Right: sticky GIF preview */}
-        <div className="hidden lg:block lg:w-1/2">
-          <div className="sticky top-0 flex h-screen items-center justify-center pl-12">
-            <div className="relative w-full max-w-lg">
-              {/* Browser chrome */}
-              <div className="overflow-hidden rounded-xl border border-stone-200 bg-white shadow-2xl dark:border-stone-700 dark:bg-stone-800">
-                {/* Title bar */}
-                <div className="flex items-center gap-2 border-b border-stone-200 bg-stone-100 px-4 py-3 dark:border-stone-700 dark:bg-stone-900">
-                  <div className="flex gap-1.5">
-                    <div className="h-3 w-3 rounded-full bg-red-400" />
-                    <div className="h-3 w-3 rounded-full bg-yellow-400" />
-                    <div className="h-3 w-3 rounded-full bg-green-400" />
-                  </div>
-                  <div className="ml-2 flex-1 rounded-md bg-stone-200 px-3 py-1 text-xs text-stone-400 dark:bg-stone-700 dark:text-stone-500">
-                    coderecipe.dev
-                  </div>
-                </div>
-
-                {/* GIF area */}
-                <div className="relative aspect-[4/3] bg-stone-50 dark:bg-stone-900">
-                  {steps.map((step, i) => (
-                    <div
-                      key={step.number}
-                      className={`absolute inset-0 flex flex-col items-center justify-center gap-4 p-8 transition-all duration-500 ${
-                        activeStep === i
-                          ? "scale-100 opacity-100"
-                          : "scale-95 opacity-0"
-                      }`}
-                    >
-                      {/* Placeholder for GIF */}
-                      <div
-                        className={`flex h-20 w-20 items-center justify-center rounded-2xl ${step.bgColor}`}
-                      >
-                        <step.icon className={`h-10 w-10 ${step.color}`} />
-                      </div>
-                      <div className="text-center">
-                        <p className="text-sm font-medium text-stone-400 dark:text-stone-500">
-                          GIF 플레이스홀더
-                        </p>
-                        <p className="mt-1 text-xs text-stone-300 dark:text-stone-600">
-                          {step.gif}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Floating badge */}
-              <div
-                className={`absolute -bottom-4 -right-4 rounded-full px-4 py-2 text-sm font-bold text-white shadow-lg transition-all duration-500 ${
-                  activeStep === 0
-                    ? "bg-blue-500"
-                    : activeStep === 1
-                    ? "bg-amber-500"
-                    : "bg-green-500"
-                }`}
-              >
-                Step {activeStep + 1} / 3
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Mobile: show GIF inline */}
-        <div className="lg:hidden">
-          <div className="mx-auto max-w-sm px-4 pb-12">
-            <div className="overflow-hidden rounded-xl border border-stone-200 bg-white shadow-lg dark:border-stone-700 dark:bg-stone-800">
-              <div className="flex items-center gap-1.5 border-b border-stone-200 bg-stone-100 px-3 py-2 dark:border-stone-700 dark:bg-stone-900">
-                <div className="h-2 w-2 rounded-full bg-red-400" />
-                <div className="h-2 w-2 rounded-full bg-yellow-400" />
-                <div className="h-2 w-2 rounded-full bg-green-400" />
-              </div>
-              <div className="flex aspect-[4/3] items-center justify-center bg-stone-50 p-6 dark:bg-stone-900">
-                <div className="text-center">
-                  <div
-                    className={`mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-2xl ${steps[activeStep].bgColor}`}
-                  >
-                    {(() => {
-                      const Icon = steps[activeStep].icon;
-                      return (
-                        <Icon
-                          className={`h-8 w-8 ${steps[activeStep].color}`}
-                        />
-                      );
-                    })()}
-                  </div>
-                  <p className="text-xs text-stone-400">GIF 플레이스홀더</p>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </section>

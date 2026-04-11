@@ -24,27 +24,27 @@ const stats = [
 export function StatsSection() {
   return (
     <section className="bg-stone-900 dark:bg-stone-950">
-      <div className="container mx-auto px-4 py-20">
-        <p className="mb-2 text-center text-sm font-medium text-amber-400">
+      <div className="container mx-auto px-4 py-24 lg:py-32">
+        <p className="mb-3 text-center text-sm font-medium tracking-wide text-amber-400 uppercase">
           Why CodeRecipe
         </p>
-        <h2 className="mb-16 text-center text-3xl font-bold text-white sm:text-4xl">
+        <h2 className="mb-20 text-center text-3xl font-bold text-white sm:text-4xl lg:text-5xl">
           숫자로 보는 CodeRecipe
         </h2>
 
-        <div className="mx-auto grid max-w-4xl gap-8 sm:grid-cols-3">
+        <div className="mx-auto grid max-w-5xl gap-12 sm:grid-cols-3 sm:gap-8">
           {stats.map((stat) => (
             <div key={stat.label} className="text-center">
-              <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-500/10">
-                <stat.icon className="h-7 w-7 text-amber-400" />
+              <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-amber-500/10">
+                <stat.icon className="h-8 w-8 text-amber-400" />
               </div>
-              <p className="text-4xl font-black text-white sm:text-5xl">
+              <p className="text-5xl font-black text-white sm:text-6xl lg:text-7xl">
                 {stat.value}
               </p>
-              <p className="mt-2 text-sm font-medium text-amber-400">
+              <p className="mt-3 text-base font-medium text-amber-400">
                 {stat.label}
               </p>
-              <p className="mt-1 text-sm text-stone-400">
+              <p className="mt-2 text-base text-stone-400">
                 {stat.description}
               </p>
             </div>

@@ -103,18 +103,18 @@ export default function HomePage() {
         <ScrollSteps />
         {/* Before / After */}
         <section className="bg-stone-50 dark:bg-stone-900">
-          <div className="container mx-auto px-4 py-16">
-            <div className="mb-4 text-center">
-              <p className="mb-2 text-sm font-medium text-amber-500">
-                이렇게 말하면, 이런 앱이 나와요
-              </p>
-              <h2 className="text-2xl font-bold text-stone-800 dark:text-stone-100 sm:text-3xl">
+          <div className="container mx-auto px-4 py-24 lg:py-32">
+            <div className="mb-16 text-center">
+              <p className="mb-3 text-center text-sm font-medium tracking-wide text-amber-500 uppercase">
                 Before → After
+              </p>
+              <h2 className="text-3xl font-bold text-stone-800 dark:text-stone-100 sm:text-4xl lg:text-5xl">
+                이렇게 말하면, 이런 앱이 나와요
               </h2>
+              <p className="mx-auto mt-4 max-w-lg text-lg text-stone-500 dark:text-stone-400">
+                한 줄 설명만 입력하면 Claude Code가 완성된 앱을 만들어 드려요
+              </p>
             </div>
-            <p className="mx-auto mb-12 max-w-lg text-center text-sm text-stone-500 dark:text-stone-400">
-              한 줄 설명만 입력하면 Claude Code가 완성된 앱을 만들어 드려요
-            </p>
 
             <div className="mx-auto max-w-5xl space-y-8">
               {demos.map((demo) => (
@@ -187,32 +187,35 @@ export default function HomePage() {
 
         {/* Persona */}
         <section>
-          <div className="container mx-auto px-4 py-16">
-            <div className="mb-12 text-center">
-              <h2 className="text-2xl font-bold text-stone-800 dark:text-stone-100 sm:text-3xl">
+          <div className="container mx-auto px-4 py-24 lg:py-32">
+            <div className="mb-16 text-center">
+              <p className="mb-3 text-sm font-medium tracking-wide text-amber-500 uppercase">
+                Who is it for
+              </p>
+              <h2 className="text-3xl font-bold text-stone-800 dark:text-stone-100 sm:text-4xl lg:text-5xl">
                 이런 분을 위한 서비스예요
               </h2>
-              <p className="mt-3 text-stone-500 dark:text-stone-400">
+              <p className="mt-4 text-lg text-stone-500 dark:text-stone-400">
                 코딩을 모르는 분도, 조금 아는 분도, 누구나 환영합니다
               </p>
             </div>
 
-            <div className="mx-auto grid max-w-4xl gap-6 sm:grid-cols-3">
+            <div className="mx-auto grid max-w-5xl gap-6 sm:grid-cols-3 lg:gap-8">
               {personas.map((p) => (
                 <div
                   key={p.title}
-                  className="group rounded-2xl border border-stone-200 bg-white p-6 transition-all hover:border-amber-300 hover:shadow-md dark:border-stone-700 dark:bg-stone-800 dark:hover:border-amber-500/50"
+                  className="group rounded-2xl border border-stone-200 bg-white p-8 transition-all hover:border-amber-300 hover:shadow-lg dark:border-stone-700 dark:bg-stone-800 dark:hover:border-amber-500/50"
                 >
-                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-amber-50 text-amber-500 transition-colors group-hover:bg-amber-100 dark:bg-amber-900/30 dark:group-hover:bg-amber-900/50">
-                    <p.icon className="h-6 w-6" />
+                  <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-xl bg-amber-50 text-amber-500 transition-colors group-hover:bg-amber-100 dark:bg-amber-900/30 dark:group-hover:bg-amber-900/50">
+                    <p.icon className="h-7 w-7" />
                   </div>
-                  <h3 className="mb-1 font-bold text-stone-800 dark:text-stone-100">
+                  <h3 className="mb-2 text-xl font-bold text-stone-800 dark:text-stone-100">
                     {p.title}
                   </h3>
-                  <p className="mb-3 text-sm leading-relaxed text-stone-500 dark:text-stone-400">
+                  <p className="mb-4 text-base leading-relaxed text-stone-500 dark:text-stone-400">
                     {p.description}
                   </p>
-                  <p className="text-sm font-medium text-amber-600 dark:text-amber-400">
+                  <p className="text-base font-medium text-amber-600 dark:text-amber-400">
                     &ldquo;{p.quote}&rdquo;
                   </p>
                 </div>
@@ -228,7 +231,7 @@ export default function HomePage() {
         <FinalCta />
       </main>
 
-      <footer className="border-t border-amber-100 bg-amber-50/50 dark:border-stone-700 dark:bg-stone-900">
+      <footer className="border-t border-stone-200 bg-amber-50/50 dark:border-stone-700 dark:bg-stone-900">
         <div className="container mx-auto px-4 pt-10">
           {/* Top row: logo + description left, links right */}
           <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
