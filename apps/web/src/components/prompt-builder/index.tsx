@@ -61,7 +61,7 @@ function StepIndicator({ current }: { current: Step }) {
 const TOPIC_PLACEHOLDER_BY_TYPE: Record<ProjectType, string> = {
   website: "예: 동네 카페 소개, 프리랜서 포트폴리오, 강아지 입양 안내",
   "chrome-extension": "예: 유튜브 영상 메모, 쇼핑 가격 비교, 뉴스 요약",
-  chatbot: "예: 카페 주문 안내, 영어 회화 연습, 운동 루틴 추천",
+  "ai-automation": "예: 뉴스 요약 봇, 파일 자동 정리, 데이터 수집 스크립트",
   webapp: "예: 독서 기록 관리, 팀 일정 관리, 동네 중고거래",
 };
 

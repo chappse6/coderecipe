@@ -14,6 +14,22 @@ This project uses the **Lemon Kitchen** palette. Full spec: `DESIGN.md` (project
 - Primary button text must be `text-stone-800` (not white — yellow background needs dark text for contrast)
 - Use `bg-recipe-primary` / `hover:bg-recipe-primary-hover` instead of raw `bg-amber-400` / `bg-amber-500`
 
+## Next.js Typed Routes
+
+This project has `typedRoutes: true` in `next.config.mjs`. When defining route arrays used with `<Link href={...}>`, always use `as const` on href values to preserve literal types. Otherwise TypeScript will widen them to `string`, causing a type error.
+
+```ts
+// ✅ Correct
+const links = [
+  { href: "/setup" as const, label: "환경 진단" },
+];
+
+// ❌ Wrong — href becomes `string`, Link will reject it
+const links = [
+  { href: "/setup", label: "환경 진단" },
+];
+```
+
 ## Skill routing
 
 When the user's request matches an available skill, ALWAYS invoke it using the Skill

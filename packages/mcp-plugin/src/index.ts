@@ -43,9 +43,9 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
           properties: {
             projectType: {
               type: "string",
-              enum: ["website", "chrome-extension", "chatbot", "webapp"],
+              enum: ["website", "chrome-extension", "ai-automation", "webapp"],
               description:
-                "만들고 싶은 프로젝트 유형: website(웹사이트), chrome-extension(크롬 확장 프로그램), chatbot(챗봇), webapp(웹앱)",
+                "만들고 싶은 프로젝트 유형: website(웹사이트), chrome-extension(크롬 확장 프로그램), ai-automation(AI 자동화 도구), webapp(웹앱)",
             },
             topic: {
               type: "string",
@@ -94,7 +94,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
           properties: {
             projectType: {
               type: "string",
-              enum: ["website", "chrome-extension", "chatbot", "webapp"],
+              enum: ["website", "chrome-extension", "ai-automation", "webapp"],
               description: "프로젝트 유형",
             },
           },

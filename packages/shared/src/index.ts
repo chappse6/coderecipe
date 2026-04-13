@@ -293,7 +293,7 @@ export const GLOSSARY_TAGS = [
 
 // ── Prompt Builder Types ──────────────────────────────────────────────────────
 
-export type ProjectType = "website" | "chrome-extension" | "chatbot" | "webapp";
+export type ProjectType = "website" | "chrome-extension" | "ai-automation" | "webapp";
 
 export interface ProjectTypeOption {
   value: ProjectType;
@@ -316,10 +316,10 @@ export const PROJECT_TYPE_OPTIONS: ProjectTypeOption[] = [
     description: "브라우저에서 사용하는 도구",
   },
   {
-    value: "chatbot",
-    label: "챗봇",
+    value: "ai-automation",
+    label: "AI 자동화 도구",
     emoji: "🤖",
-    description: "카카오톡, 슬랙 등 메신저 봇",
+    description: "로컬에서 돌리는 AI 스크립트, 자동화 봇",
   },
   {
     value: "webapp",
@@ -352,13 +352,13 @@ export const FEATURES_BY_TYPE: Record<ProjectType, FeatureOption[]> = {
     { value: "notification", label: "알림 보내기" },
     { value: "context-menu", label: "마우스 우클릭 메뉴" },
   ],
-  chatbot: [
-    { value: "faq", label: "자주 묻는 질문 자동 답변" },
-    { value: "reservation", label: "예약/일정 잡기" },
-    { value: "product-recommend", label: "상품 추천" },
-    { value: "survey", label: "설문/피드백 수집" },
-    { value: "reminder", label: "일정 알림 보내기" },
-    { value: "order-status", label: "주문 현황 안내" },
+  "ai-automation": [
+    { value: "api-integration", label: "외부 API 연동 (OpenAI, Claude 등)" },
+    { value: "file-processing", label: "파일 자동 처리 (변환, 정리, 분류)" },
+    { value: "data-scraping", label: "데이터 수집/스크래핑" },
+    { value: "scheduling", label: "스케줄링/반복 실행" },
+    { value: "notification", label: "알림 보내기 (슬랙, 디스코드 등)" },
+    { value: "report-gen", label: "리포트/요약 자동 생성" },
   ],
   webapp: [
     { value: "login", label: "회원가입 / 로그인" },
@@ -555,7 +555,7 @@ const PERSONA_BY_TYPE: Record<ProjectType, string> = {
 
   "chrome-extension": `당신은 크롬 확장 프로그램 전문 개발자입니다. 사용자가 매일 쓰게 되는 실용적인 도구를 만드는 것이 당신의 특기입니다. 가볍고 빠르게 동작하면서도, 쓸 때 "이거 잘 만들었다"라는 느낌이 드는 확장 프로그램을 만들어 주세요.`,
 
-  chatbot: `당신은 대화형 서비스 전문 개발자입니다. 사용자가 실제 사람과 대화하는 것 같은 자연스러운 챗봇을 만드는 것이 당신의 특기입니다. 딱딱한 기계 응답이 아닌, 맥락을 이해하고 적절하게 반응하는 챗봇을 만들어 주세요.`,
+  "ai-automation": `당신은 AI 자동화 도구 전문 개발자입니다. 복잡한 반복 작업을 스크립트 하나로 자동화하는 것이 당신의 특기입니다. 배포 없이 로컬에서 바로 실행할 수 있고, 비개발자도 설정만 바꿔서 쓸 수 있는 실용적인 자동화 도구를 만들어 주세요.`,
 
   webapp: `당신은 풀스택 웹 애플리케이션 개발자입니다. 실제로 사람들이 매일 쓸 수 있는 수준의 완성도 높은 웹앱을 만드는 것이 당신의 특기입니다. SaaS 제품처럼 깔끔한 UX와 안정적인 동작을 갖춘 웹앱을 만들어 주세요.`,
 };
@@ -574,11 +574,12 @@ const TECH_STACK_BY_TYPE: Record<ProjectType, string> = {
 - 필요한 경우 content script와 background service worker 활용
 - 외부 프레임워크 없이 가볍게 만들어 주세요`,
 
-  chatbot: `## 기술 스택
-- HTML + CSS + 바닐라 JavaScript (단일 페이지)
-- 대화 데이터: JSON 파일로 관리
-- 메시지 매칭: 키워드 기반 + 유사도 매칭
-- 외부 API나 서버 없이 클라이언트만으로 동작하게 만들어 주세요`,
+  "ai-automation": `## 기술 스택
+- Node.js (ES Modules)
+- 설정: .env 파일 + JSON 설정 파일
+- 의존성: 최소화 (필요한 패키지만 package.json에 명시)
+- 실행: \`node index.js\` 또는 \`npm start\`로 바로 실행 가능하게
+- 배포 불필요 — 로컬 환경에서 완결되는 구조로 만들어 주세요`,
 
   webapp: `## 기술 스택
 - HTML + CSS + 바닐라 JavaScript (또는 간단한 모듈 구조)
@@ -605,14 +606,13 @@ const DESIGN_GUIDANCE_BY_TYPE: Record<ProjectType, string> = {
 - 아이콘: 16x16, 32x32, 48x48, 128x128 사이즈 모두 준비. SVG 기반으로 선명하게
 - 색상: 시스템 UI와 어울리는 중립적 색상 + 주요 액션에만 포인트 색 하나`,
 
-  chatbot: `## 대화 설계 원칙
-- 첫 인사: 자연스럽고 친근하게. "안녕하세요! 무엇을 도와드릴까요?" 수준이 아니라, 이 챗봇만의 캐릭터가 느껴지는 인사를 만들어 주세요
-- 추천 질문: 사용자가 뭘 입력해야 할지 모를 때를 대비한 버튼형 추천 질문 3~4개
-- 답변 길이: 한 번에 2~3문장. 길어지면 단계별로 나눠서 보내주세요
-- 솔직한 응답: "그 부분은 잘 모르겠어요. 이런 건 어떠세요?" 같은 자연스러운 모름 표현
-- 대화 흐름: 항상 다음 행동을 유도하되, 강요가 아닌 제안 형태로
-- 감정 인식: 감사, 불만 등 감정적 표현에 적절히 반응하는 응답 포함
-- UI: 카카오톡/메신저 스타일의 말풍선 UI. 타이핑 애니메이션으로 실제 대화 느낌`,
+  "ai-automation": `## 설계 원칙
+- 단일 책임: 하나의 도구가 하나의 작업을 확실하게 처리
+- 설정 분리: API 키, 경로, 옵션 등은 .env 또는 config.json으로 분리. 코드 수정 없이 설정만 바꿔서 다른 용도로 재활용 가능하게
+- 에러 복원: 네트워크 실패, API 오류 시 자동 재시도(최대 3회) + 명확한 에러 로그
+- 진행 표시: 처리 중인 항목 수, 완료율 등을 콘솔에 표시
+- 로그: 실행 결과를 logs/ 폴더에 날짜별로 저장
+- 안전장치: 실행 전 dry-run 모드로 미리 확인 가능하게`,
 
   webapp: `## 디자인 원칙
 - 핵심 유저 플로우를 먼저 설계하고, 그 흐름이 3단계 이내에 완료되게 해주세요
@@ -641,13 +641,13 @@ const WORK_STYLE_BY_TYPE: Record<ProjectType, string> = {
 - 한 기능 완성할 때마다 "크롬에서 확장 프로그램 로드해서 확인해 보세요"라고 알려주세요
 - 에러 발생 시 크롬 개발자도구 어디서 확인하는지도 안내해 주세요`,
 
-  chatbot: `## 작업 방식
-1. 대화 시나리오 설계 — 인사 → 의도 파악 → 응답 → 후속 안내 흐름
-2. 핵심 대화 5개를 먼저 완성하고 테스트
-3. 예외 처리 — 인식 못하는 입력, 다시 물어보기, 기본 응답
-4. UI 마무리 — 말풍선, 타이핑 효과, 추천 질문 버튼
-- 한 시나리오 완성할 때마다 "여기까지 확인해 보세요"라고 알려주세요
-- 대화 데이터는 별도 JSON 파일로 분리해서 비개발자도 수정 가능하게`,
+  "ai-automation": `## 작업 방식
+1. 입출력 설계 — 어떤 데이터를 받아서 어떤 결과를 만드는지 명확하게 정의
+2. 핵심 로직 구현 — 메인 자동화 파이프라인 완성
+3. 설정 파일 분리 — .env, config.json으로 커스터마이징 가능하게
+4. 에러 처리 + 로깅 — 실패 시 원인 파악 가능한 로그
+- 한 단계 완성할 때마다 "여기까지 테스트해 보세요"라고 알려주세요
+- 설정 파일은 주석과 예시를 넣어서 비개발자도 수정 가능하게`,
 
   webapp: `## 작업 방식
 1. 데이터 모델 설계 — 어떤 정보를 어떤 구조로 저장할지 먼저 정하기
@@ -675,12 +675,13 @@ const DEV_GUIDELINES_BY_TYPE: Record<ProjectType, string> = {
 - 콘텐츠 스크립트가 기존 웹사이트 스타일/기능을 깨뜨리지 않도록 주의 (CSS 네임스페이스 격리)
 - README에 설치 방법(개발자 모드 → 압축해제 로드) 포함`,
 
-  chatbot: `## 개발 지침
-- 모든 응답은 한국어, 존댓말로. 딱딱한 안내문이 아니라 실제 사람이 말하는 것처럼 자연스러운 어조로 작성해 주세요
-- 대화 데이터는 JSON 파일로 분리해서 코드 수정 없이 시나리오를 바꿀 수 있게
-- 인식 못하는 입력에 대한 기본 응답 반드시 포함 (다양한 변형 3개 이상)
-- 대화 UI: 카카오톡 스타일 말풍선, 시간 표시, 프로필 아이콘
-- README에 실행 방법과 대화 시나리오 수정 가이드 포함`,
+  "ai-automation": `## 개발 지침
+- 콘솔 출력과 로그 메시지는 한국어로 작성
+- .env.example 파일 제공 — 필요한 환경변수와 설명을 주석으로
+- config.json.example 제공 — 설정 항목마다 용도 설명
+- 민감 정보(API 키 등)는 반드시 .env로 분리, .gitignore에 포함
+- package.json에 start, dry-run 스크립트 포함
+- README에 설치 방법, 설정 방법, 실행 예시 포함`,
 
   webapp: `## 개발 지침
 - 모든 UI 텍스트는 한국어. 버튼, 메시지, 안내문 모두 자연스러운 한국어로
@@ -708,13 +709,13 @@ const QUALITY_RULES_BY_TYPE: Record<ProjectType, string> = {
 - 데이터: 사용자 설정과 데이터가 브라우저를 닫았다 열어도 유지
 - 디자인: 기본 HTML 느낌이 아닌, 다듬어진 UI. 적절한 패딩, 정렬, 색상 대비`,
 
-  chatbot: `## 퀄리티 기준 (중요)
-기계가 답변하는 느낌이 아니라, 해당 분야에 능숙한 실제 상담원과 대화하는 느낌이어야 합니다:
-- 자연스러움: "~에 대해 안내해 드리겠습니다" 같은 기계적 표현 대신, "아, 그 부분이 궁금하시군요!" 같은 자연스러운 표현
-- 맥락 유지: 이전 대화 내용을 기억하고 참조할 수 있어야 합니다 (같은 세션 내)
-- 다양한 응답: 같은 질문에도 2~3가지 다른 표현으로 답변해서 반복감 줄이기
-- 실제 데이터: 주제에 맞는 현실적인 답변 내용. 카페봇이라면 실제 메뉴명과 가격, 운영시간 등
-- UI 완성도: 메시지 입력 시 부드러운 스크롤, 타이핑 애니메이션, 시간 표시`,
+  "ai-automation": `## 퀄리티 기준 (중요)
+실제로 매일 돌려도 문제없는, 안정적인 자동화 도구여야 합니다:
+- 안정성: 네트워크 오류, API 제한, 파일 없음 등 예외 상황에서도 크래시 없이 처리
+- 재현성: 같은 설정으로 실행하면 같은 결과. 랜덤 요소가 있다면 시드 설정 가능하게
+- 투명성: 무엇을 처리했고, 무엇을 건너뛰었는지 로그로 명확히 확인 가능
+- 효율성: 불필요한 API 호출 최소화. 이미 처리한 항목은 건너뛰기
+- 설정 용이성: .env와 config.json만 수정하면 다른 환경에서도 바로 동작`,
 
   webapp: `## 퀄리티 기준 (중요)
 실제 서비스 중인 웹앱처럼 보이고 동작해야 합니다:
@@ -748,11 +749,11 @@ const COMPLETION_BY_TYPE: Record<ProjectType, string> = {
 3. 기능 수정 시 어떤 파일을 보면 되는지
 4. 크롬 웹스토어 등록을 위해 추가로 필요한 것`,
 
-  chatbot: `## 완료 후
+  "ai-automation": `## 완료 후
 모두 완성되면 아래 내용을 정리해서 알려주세요:
-1. 챗봇 실행 및 테스트 방법
-2. 대화 시나리오 추가/수정 방법 (JSON 파일 구조 설명)
-3. 실제 메신저 연결 방법 간단 안내
+1. 설치 및 실행 방법 (환경변수 설정 포함)
+2. 설정 파일 수정 가이드 (각 옵션 설명)
+3. dry-run 모드로 테스트하는 방법
 4. 다음 단계로 추가하면 좋을 기능 2~3개 제안`,
 
   webapp: `## 완료 후
