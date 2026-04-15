@@ -181,25 +181,18 @@ export function ScrollSteps() {
                         {steps.map((step, i) => (
                           <div
                             key={step.number}
-                            className={`absolute inset-0 flex flex-col items-center justify-center gap-4 p-8 transition-all duration-500 ${
+                            className={`absolute inset-0 transition-all duration-500 ${
                               activeStep === i
                                 ? "scale-100 opacity-100"
                                 : "scale-95 opacity-0"
                             }`}
                           >
-                            <div
-                              className={`flex h-20 w-20 items-center justify-center rounded-2xl ${step.bgColor}`}
-                            >
-                              <step.icon className={`h-10 w-10 ${step.color}`} />
-                            </div>
-                            <div className="text-center">
-                              <p className="text-sm font-medium text-stone-400 dark:text-stone-500">
-                                GIF 플레이스홀더
-                              </p>
-                              <p className="mt-1 text-xs text-stone-300 dark:text-stone-600">
-                                {step.gif}
-                              </p>
-                            </div>
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img
+                              src={step.gif}
+                              alt={step.title}
+                              className="h-full w-full object-cover"
+                            />
                           </div>
                         ))}
                       </div>
@@ -258,15 +251,13 @@ export function ScrollSteps() {
                     <div className="h-2 w-2 rounded-full bg-yellow-400" />
                     <div className="h-2 w-2 rounded-full bg-green-400" />
                   </div>
-                  <div className="flex aspect-[4/3] items-center justify-center bg-stone-50 p-6 dark:bg-stone-900">
-                    <div className="text-center">
-                      <div
-                        className={`mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-2xl ${step.bgColor}`}
-                      >
-                        <step.icon className={`h-8 w-8 ${step.color}`} />
-                      </div>
-                      <p className="text-xs text-stone-400">GIF 플레이스홀더</p>
-                    </div>
+                  <div className="aspect-[4/3] bg-stone-50 dark:bg-stone-900">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={step.gif}
+                      alt={step.title}
+                      className="h-full w-full object-cover"
+                    />
                   </div>
                 </div>
               </div>
