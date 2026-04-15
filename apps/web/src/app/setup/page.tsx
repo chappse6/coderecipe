@@ -1,5 +1,6 @@
 import { EnvironmentChecker } from "@/components/environment-checker";
 import { Nav } from "@/components/layout/nav";
+import { NextStepCta } from "@/components/layout/next-step-cta";
 import Link from "next/link";
 
 export const metadata = {
@@ -37,6 +38,12 @@ export default function SetupPage() {
               </Link>
             </p>
           </div>
+
+          <NextStepCta
+            href="/direction"
+            label="방향 잡기"
+            hint="설치가 끝났다면, 뭘 만들지 같이 정리해 볼까요?"
+          />
         </div>
       </div>
     </div>

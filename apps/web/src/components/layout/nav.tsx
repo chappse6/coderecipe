@@ -6,6 +6,7 @@ import { MobileMenuButton } from "./mobile-menu-button";
 const navLinks = [
   { href: "/guide" as const, label: "가이드" },
   { href: "/setup" as const, label: "환경 진단" },
+  { href: "/direction" as const, label: "방향 잡기" },
   { href: "/builder" as const, label: "레시피 만들기" },
   { href: "/error-translator" as const, label: "에러 번역기" },
   { href: "/faq" as const, label: "FAQ" },

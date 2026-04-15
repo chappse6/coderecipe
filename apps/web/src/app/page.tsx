@@ -20,6 +20,7 @@ import {
   GraduationCap,
   Lightbulb,
   Github,
+  Compass,
 } from "lucide-react";
 
 export default function HomePage() {
@@ -248,6 +249,9 @@ export default function HomePage() {
               <Link href="/guide" className="transition-colors hover:text-stone-800 dark:hover:text-stone-200">
                 가이드
               </Link>
+              <Link href="/direction" className="transition-colors hover:text-stone-800 dark:hover:text-stone-200">
+                방향 잡기
+              </Link>
               <Link href="/builder" className="transition-colors hover:text-stone-800 dark:hover:text-stone-200">
                 레시피 만들기
               </Link>
@@ -301,9 +305,9 @@ const tools = [
     title: "환경 진단",
   },
   {
-    href: "/guide" as const,
-    icon: MonitorSmartphone,
-    title: "Claude Code 가이드",
+    href: "/direction" as const,
+    icon: Compass,
+    title: "방향 잡기",
   },
   {
     href: "/builder" as const,
@@ -314,6 +318,11 @@ const tools = [
     href: "/error-translator" as const,
     icon: AlertCircle,
     title: "에러 번역기",
+  },
+  {
+    href: "/guide" as const,
+    icon: MonitorSmartphone,
+    title: "Claude Code 가이드",
   },
   {
     href: "/glossary" as const,
@@ -329,7 +338,6 @@ const tools = [
 
 const soonTools: { title: string; iconName: string }[] = [
   { title: "내 앱 세상에 공개하기", iconName: "Rocket" },
-  { title: "다음에 뭐 하지?", iconName: "Compass" },
 ];
 
 

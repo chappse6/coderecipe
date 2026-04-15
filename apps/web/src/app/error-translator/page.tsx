@@ -1,5 +1,6 @@
 import { ErrorTranslator } from "@/components/error-translator";
 import { Nav } from "@/components/layout/nav";
+import { NextStepCta } from "@/components/layout/next-step-cta";
 
 export const metadata = {
   title: "에러 번역기 - CodeRecipe",
@@ -124,6 +125,12 @@ export default function ErrorTranslatorPage() {
               </div>
             </aside>
           </div>
+
+          <NextStepCta
+            href="/guide"
+            label="Claude Code 가이드"
+            hint="막힐 때 자주 쓰는 명령어와 팁을 한 번에 훑어보세요."
+          />
         </div>
       </div>
     </div>

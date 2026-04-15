@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { PromptBuilder } from "@/components/prompt-builder";
 import { Nav } from "@/components/layout/nav";
+import { NextStepCta } from "@/components/layout/next-step-cta";
 
 export const metadata: Metadata = {
   title: "레시피 만들기 | CodeRecipe",
@@ -24,6 +25,12 @@ export default function BuilderPage() {
           </div>
 
             <PromptBuilder />
+
+          <NextStepCta
+            href="/error-translator"
+            label="에러 번역기"
+            hint="만들다 에러가 나면 여기서 한국어로 번역해 드려요."
+          />
         </div>
       </div>
     </div>

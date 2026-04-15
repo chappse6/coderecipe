@@ -8,9 +8,7 @@ import {
   type OsOption,
   type DevTool,
 } from "@coderecipe/shared";
-import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 
 // ── OS Selector ──────────────────────────────────────────────────────────────
 
@@ -245,12 +243,6 @@ export function EnvironmentChecker() {
                   <p className="mt-1 text-sm text-stone-500 dark:text-stone-400">
                     이제 Claude Code로 앱을 만들 준비가 됐어요.
                   </p>
-                  <Button
-                    className="mt-4 bg-recipe-primary text-stone-800 hover:bg-recipe-primary-hover"
-                    asChild
-                  >
-                    <Link href="/builder">프롬프트 만들러 가기 →</Link>
-                  </Button>
                 </div>
               )}
 

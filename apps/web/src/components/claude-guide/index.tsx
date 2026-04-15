@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Copy, Check } from "lucide-react";
+import Link from "next/link";
+import { Copy, Check, Compass } from "lucide-react";
 
 // ── Data ─────────────────────────────────────────────────────────────────────
 
@@ -237,7 +238,7 @@ export function ClaudeGuide() {
       {/* Left sidebar — topic list */}
       <nav className="hidden w-56 flex-shrink-0 md:block">
         <div className="sticky top-24 space-y-1">
-          {SECTIONS.map((section) => (
+          {SECTIONS.filter((s) => s.id !== "tips").map((section) => (
             <button
               key={section.id}
               type="button"
@@ -252,7 +253,36 @@ export function ClaudeGuide() {
             </button>
           ))}
 
-          <div className="mt-4 border-t border-stone-200 pt-4 dark:border-stone-700">
+          <div className="mt-3 border-t border-stone-200 pt-3 dark:border-stone-700">
+            {SECTIONS.filter((s) => s.id === "tips").map((section) => (
+              <button
+                key={section.id}
+                type="button"
+                onClick={() => setActiveId(section.id)}
+                className={`w-full rounded-lg px-3 py-2.5 text-left text-sm font-medium transition-colors ${
+                  activeId === section.id
+                    ? "border-l-[3px] border-amber-500 bg-amber-50 pl-[9px] text-stone-800 dark:border-amber-400 dark:bg-stone-700 dark:text-white"
+                    : "text-stone-500 hover:bg-stone-50 hover:text-stone-700 dark:text-stone-400 dark:hover:bg-stone-800 dark:hover:text-stone-200"
+                }`}
+              >
+                {section.title}
+              </button>
+            ))}
+          </div>
+
+          <div className="mt-3 space-y-3 border-t border-stone-200 pt-3 dark:border-stone-700">
+            <Link
+              href="/direction"
+              className="flex items-start gap-2 rounded-lg px-3 py-2.5 text-sm text-stone-500 transition-colors hover:bg-stone-50 hover:text-stone-700 dark:text-stone-400 dark:hover:bg-stone-800 dark:hover:text-stone-200"
+            >
+              <Compass className="mt-0.5 h-4 w-4 flex-shrink-0" />
+              <span className="min-w-0">
+                <span className="block font-medium">방향 잡기</span>
+                <span className="block text-xs text-stone-400 dark:text-stone-500">
+                  플러그인으로 아이디어 정리
+                </span>
+              </span>
+            </Link>
             <a
               href="https://docs.anthropic.com/en/docs/claude-code"
               target="_blank"
